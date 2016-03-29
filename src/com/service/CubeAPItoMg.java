@@ -29,25 +29,17 @@ import com.service.dao.ServiceDAO;
 import com.service.entity.ServiceDataInfo;
 import com.service.entity.StoreRejectDataInfo;
 /**
- * cube <> sc Redis 연동
- * @author 하윤식
- * @since 2015.03.17
- * @version 1.0
+ * cube <> Magento Redis 연동
+ * @author IOS
+ * @since 2016.03.29(Tue)
+ * @version 0.1
  * @see
  *
- * <pre>
- * << 개정이력(Modification Information) >>
- *   
- *     수정일     수정자          수정내용
- *  -----------  --------    ---------------------------
- *   2015.03.17   하윤식          최초 생성 
- *
- * </pre>
  */
 
-public class ScApiCreateREDIS {
+public class CubeAPItoMg {
 	
-	private static ScApiCreateREDIS instance = new ScApiCreateREDIS();
+	private static CubeAPItoMg instance = new CubeAPItoMg();
 	
 	/* 연동 REDIS KEY */
 	private static String  SEND_PRODUCT_KEY 	= ":product:C2S"; 		// 상품 등록/수정 송신
@@ -91,12 +83,12 @@ public class ScApiCreateREDIS {
 	private static String  SEND_ORDER_RETURN_STATUS 		= "3202"; 		// 반품 요청결과상태		
 	private static String  SEND_ORDER_RETURN_CANCE_STATUS 	= "9002"; 		// 반품취소 요청상태
 	
-	public static ScApiCreateREDIS getInstance()
+	public static CubeAPItoMg getInstance()
 	{
 		return instance;
 	}
 
-	private ScApiCreateREDIS() {
+	private CubeAPItoMg() {
 		
 	}
 	
@@ -108,7 +100,7 @@ public class ScApiCreateREDIS {
 	 * @throws IOException
 	 */
 	public List<Object> GetVendorList(String dbmode, String transCD) throws IOException {
-		String methodName ="com.service.ScApiCreateREDIS.GetVendorList()";
+		String methodName ="com.service.CubeAPItoMg.GetVendorList()";
 		Logger.debug(methodName);
 
 		/*  JDBC Connection 변수 선언  */		
@@ -212,7 +204,7 @@ public class ScApiCreateREDIS {
 	public String api_SendProductData(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException
 	{
 		// 로그를 찍기 위한 변수 선언
-		String methodName ="com.service.ScApiCreateREDIS.api_SendProductData()";
+		String methodName ="com.service.CubeAPItoMg.api_SendProductData()";
 		Logger.debug(methodName);
 		
 		/*  JDBC Connection 변수 선언  */
@@ -555,7 +547,7 @@ public class ScApiCreateREDIS {
 	public String api_RecvProductData(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
 		// 로그를 찍기 위한 변수 선언
-		String methodName ="com.service.ScApiCreateREDIS.api_RecvProductData()";
+		String methodName ="com.service.CubeAPItoMg.api_RecvProductData()";
 		Logger.debug(methodName);
 
 		/* JDBC Connection 변수 선언 */
@@ -780,7 +772,7 @@ public class ScApiCreateREDIS {
 	 */
 	public String api_Auto_SendItemStock(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_SendItemStock";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_SendItemStock";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */
@@ -1087,7 +1079,7 @@ public class ScApiCreateREDIS {
 	public String api_Auto_RecvItemStock(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
 		// 로그를 찍기 위한 변수 선언
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_RecvItemStock()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_RecvItemStock()";
 		Logger.debug(methodName);
 
 		/* JDBC Connection 변수 선언 */
@@ -1327,7 +1319,7 @@ public class ScApiCreateREDIS {
 	 */
 	public String api_Auto_PO(String dbmode, String processCmd,String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_PO()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_PO()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */		
@@ -1812,7 +1804,7 @@ public class ScApiCreateREDIS {
 	public String api_Auto_PO_Send(String dbmode, String command, String call_dt, String call_seq, String tranDt, String transCD, String orderId , String orderDt, String orderHeaderKey, String orgCode , String sell_Code) 
 	        throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_PO_Send()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_PO_Send()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */			
@@ -2037,7 +2029,7 @@ public class ScApiCreateREDIS {
 	public String api_Auto_PO_Send2(String dbmode, String command, String call_dt, String call_seq, String tranDt, String transCD, String orderId, String orderDt, String orderHeaderKey, String orgCode, String sell_Code, ServiceDataInfo dInfo) 
 	        throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_PO_Send()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_PO_Send()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */			
@@ -2259,7 +2251,7 @@ public class ScApiCreateREDIS {
 	 */
 	public String api_Delivery_Send(String dbmode, String command, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Delivery_Send()";
+		String methodName ="com.service.CubeAPItoMg.api_Delivery_Send()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */			
@@ -2507,7 +2499,7 @@ public class ScApiCreateREDIS {
 	
 	public String api_Auto_ReturnConfirm(String dbmode, String command, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Delivery_Send()";
+		String methodName ="com.service.CubeAPItoMg.api_Delivery_Send()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */			
@@ -2754,7 +2746,7 @@ public class ScApiCreateREDIS {
 	 */
 	public String api_Auto_ReturnPO(String dbmode, String processCmd, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_ReturnPO()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_ReturnPO()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */		
@@ -3321,7 +3313,7 @@ public class ScApiCreateREDIS {
 	public String api_SendProductData_RedMarker(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException
 	{
 		// 로그를 찍기 위한 변수 선언
-		String methodName ="com.service.ScApiCreateREDIS.api_SendProductData_RedMarker()";
+		String methodName ="com.service.CubeAPItoMg.api_SendProductData_RedMarker()";
 		Logger.debug(methodName);
 		
 		/*  JDBC Connection 변수 선언  */
@@ -3651,7 +3643,7 @@ public class ScApiCreateREDIS {
 	
 	public String api_Auto_SendItemStock_RedMarker(String dbmode, String transCD) throws SQLException, IOException, JedisConnectionException, JSONException
 	{
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_SendItemStock_RedMarker()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_SendItemStock_RedMarker()";
 		Logger.debug(methodName);
 		
 		/* JDBC Connection 변수 선언 */
@@ -4030,7 +4022,7 @@ public class ScApiCreateREDIS {
 	 */
 	public String api_Auto_StoreReject (String dbmode, String command,String transCD){
 		
-		String methodName ="com.service.ScApiCreateREDIS.api_Auto_StoreReject()";
+		String methodName ="com.service.CubeAPItoMg.api_Auto_StoreReject()";
 		Logger.debug(methodName);
 		
 		Connection 		conn = null;
