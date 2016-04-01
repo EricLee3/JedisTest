@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="javax.servlet.http.HttpServletRequest" %>
-<%@ page import="com.service.ScApiCreateREDIS" %>
+<%@ page import="com.service.CubeAPItoMg" %>
 <%@ page import="com.service.command.util.*" %> 
 <%@ page import="java.util.*" %> 
 <%@ page import="org.apache.commons.httpclient.methods.GetMethod" %>
@@ -9,7 +9,7 @@
 <%@ page import="org.apache.commons.httpclient.HttpException" %>
 
 <%
-	ScApiCreateREDIS redisDAO	= ScApiCreateREDIS.getInstance();
+	CubeAPItoMg redisDAO	= CubeAPItoMg.getInstance();
 
 	String dbmode	= StringUtil.nullTo(request.getParameter("dbmode"),"");
 	String command	= StringUtil.nullTo(request.getParameter("command"),"");
@@ -18,7 +18,7 @@
 	
 	
 	String transCD = "40";	
-	//큐브 구분코드 ( 10:wizwid, 20:wconcept, 30:mangoKR , 40:Sterling )
+	//큐브 구분코드 ( 10:wizwid, 20:wconcept, 30:mangoKR , 40:Magento )
 	
 	String resultMessage = null;
 	//거부용

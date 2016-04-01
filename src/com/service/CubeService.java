@@ -862,7 +862,7 @@ public class CubeService {
 		Logger.debug(" callProcedure() CALL ");
 		try {
 			CubeApiCreateJSON jsonDao  = CubeApiCreateJSON.getInstance();
-			ScApiCreateREDIS  redisDao = ScApiCreateREDIS.getInstance();
+			CubeAPItoMg  redisDao = CubeAPItoMg.getInstance();
 			
 			Logger.debug("call_api["+call_api+"]");	
 			
@@ -967,7 +967,7 @@ public class CubeService {
 		Logger.debug(" callProcedure() CALL ");
 		try {
 			CubeApiCreateJSON jsonDao  = CubeApiCreateJSON.getInstance();
-			ScApiCreateREDIS  redisDao = ScApiCreateREDIS.getInstance();
+			CubeAPItoMg  redisDao = CubeAPItoMg.getInstance();
 			
 			Logger.debug("call_api["+call_api+"]");	
 			

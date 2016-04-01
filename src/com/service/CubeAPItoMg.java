@@ -42,19 +42,19 @@ public class CubeAPItoMg {
 	private static CubeAPItoMg instance = new CubeAPItoMg();
 	
 	/* 연동 REDIS KEY */
-	private static String  SEND_PRODUCT_KEY 	= ":product:C2S"; 		// 상품 등록/수정 송신
-	private static String  RECV_PRODUCT_KEY 	= ":product:S2C"; 		// 상품 등록/수정 결과 수신
-	private static String  SEND_INVENTORY_KEY 	= ":inventory:C2S"; 	// 재고 송신
-	private static String  RECV_INVENTORY_KEY 	= ":inventory:S2C"; 	// 재고 처리결과 수신	
-	private static String  RECV_ORDER 			= ":order:update:S2C"; 	// 출고의뢰 수신
-	private static String  SEND_ORDER 			= ":order:update:C2S"; 	// 출고의뢰 결과 송신
-	private static String  RECV_ORDER_RETURN 	= ":return:update:S2C"; // 반품/반품취소 수신
-	private static String  SEND_ORDER_RETURN 	= ":return:update:C2S"; // 반품/반품취소 결과 송신		
+	private static String  SEND_PRODUCT_KEY 	= ":product:C2M"; 		// 상품 정보 송신
+	private static String  RECV_PRODUCT_KEY 	= ":product:M2C"; 		// 상품 등록/수정 결과수신
+	private static String  SEND_INVENTORY_KEY 	= ":inventory:C2M"; 	// 재고 송신
+	private static String  RECV_INVENTORY_KEY 	= ":inventory:M2C"; 	// 재고 처리결과 수신	
+	private static String  RECV_ORDER 			= ":order:update:M2C"; 	// 출고의뢰 수신
+	private static String  SEND_ORDER 			= ":order:update:C2M"; 	// 출고의뢰 결과 송신
+	private static String  RECV_ORDER_RETURN 	= ":return:update:M2C"; // 반품/반품취소 수신
+	private static String  SEND_ORDER_RETURN 	= ":return:update:C2M"; // 반품/반품취소 결과 송신		
 	private static String  ORDER_RETURN_ERROR 	= ":return:error"; 		// 반품의뢰 에러 
 	private static String  ORDER_ERROR 			= ":order:error"; 		// 출고의뢰 에러 	
-	private static String  SEND_DELIVERY 		= ":order:update:C2S"; 	// 출고확정 송신
-	private static String  ORDER_RETURN_CONFIRM = ":return:update:C2S"; 	// 출고확정 송신
-	private static String  ORDER_STORE_REJECT	= ":order:store:reject:C2S"; // 매장출고거부 수신( CUBE -> SC)
+	private static String  SEND_DELIVERY 		= ":order:update:C2M"; 	// 출고확정 송신
+	private static String  ORDER_RETURN_CONFIRM = ":return:update:C2M"; 	// 출고확정 송신
+	private static String  ORDER_STORE_REJECT	= ":order:store:reject:C2M"; // 매장출고거부 수신( CUBE -> SC)
 
 	/* REDIS DB IP 운영서버 */   	
 	//private static String  RED_IP	= "220.117.243.18";
@@ -63,17 +63,20 @@ public class CubeAPItoMg {
 //	private static String  RED_IP 	= "1.214.91.21";
 
 	/*망내 테스트*/
-	private static String  RED_IP 	= "192.168.10.66";
+//	private static String  RED_IP 	= "192.168.10.66";
+	
+	/* Redis IDC */
+	private static String RED_IP = "121.189.18.56";
 	
 	
-	
-	private static int DB_INDEX 	= 1;
+	private static int DB_INDEX 	= 11;
 	private static int PORT    		= 6379;
 
 	
 	/* 연동상태코드 */
 	private static String  RECV_ORDER_STATUS 				= "3200"; 		// 주문 요청상태
-	private static String  SEND_ORDER_STATUS 				= "3202"; 		// 주문 요청결과상태	
+	//private static String  SEND_ORDER_STATUS 				= "3202"; 		// 주문 요청결과상태
+	private static String  SEND_ORDER_STATUS 				= "3350"; 		// 주문 요청결과상태
 	private static String  RECV_ORDER_CANCE_STATUS 			= "9000"; 		// 주문취소 요청상태
 	private static String  SEND_ORDER_CANCE_STATUS 			= "9002"; 		// 주문취소 요청상태
 	private static String  SEND_DELIVERY_STATUS 			= "3700"; 		// 출고확정
@@ -247,16 +250,16 @@ public class CubeAPItoMg {
 			conn =	DataBaseManager.getConnection(dbmode);		
 			conn.setAutoCommit(false);
 
-			Logger.debug("0. Sterling API 전송을위한 SQL 작성 시작");
+			Logger.debug("0. Magento 상품정보 전송을 위한 SQL 작성 시작");
 			
 			/* 0. Sterling API 전송을위한 SQL 작성 시작*/
 			sqlBuffer0.append("SELECT   RETC AS COCD							\n");	
-			sqlBuffer0.append("       , CD4  AS VDCD							\n");			
+			sqlBuffer0.append("       , CD1  AS VDCD							\n");	// CD4->CD1 revised [IOS 29-MAR-16]		
 			sqlBuffer0.append("  FROM TBB150					    			\n");	
 			sqlBuffer0.append(" WHERE REFTP = 'ZY'								\n");	
 			sqlBuffer0.append("   AND REFCD <> '0000'							\n");	
 			sqlBuffer0.append("   AND CD4   = '"+ transCD +"'					\n");	
-			sqlBuffer0.append("   GROUP BY RETC, CD4						    \n");
+			sqlBuffer0.append("   GROUP BY RETC, CD1						    \n");	// CD4->CD1 revised [IOS 29-MAR-16]
 			
 			/* 0-1. 주 쿼리문*/
 			sqlBuffer1.append("SELECT    MAX(A.COCD)      AS COCD				\n");	
@@ -272,7 +275,9 @@ public class CubeAPItoMg {
 			sqlBuffer1.append("        , MAX(A.GOODS_URL)     AS GOODS_URL		\n");
 			sqlBuffer1.append("        , MAX(A.SEX ) 		  AS SEX			\n");
 			sqlBuffer1.append("        , MAX(A.SEASON)  	  AS SEASON			\n");
-			sqlBuffer1.append("        , MAX(A.GROUP_DESC)    AS GROUP_DESC		\n");			
+			sqlBuffer1.append("        , MAX(A.GROUP_DESC)    AS GROUP_DESC		\n");	
+			// inserted [IOS 29-MAR-16]
+			sqlBuffer1.append("        , MAX(A.VENDOR_ID)    AS VENDOR_ID		\n");	
 			sqlBuffer1.append("  FROM TBP050_TRANSFER A ,						\n");				
 			sqlBuffer1.append("      (	SELECT   BAR_CODE					    \n");	
 			sqlBuffer1.append("                , MAX(TRAN_DATE) AS TRAN_DATE 	\n");
@@ -330,8 +335,8 @@ public class CubeAPItoMg {
 			
 			rs0 = pstmt0.executeQuery();
 
-			/* 1. API CUBE 상품 전송데이터 Count 시작 */
-			Logger.debug("[1. API CUBE 상품 전송데이터 조회 시작]");	
+			/* 1. CUBE 상품 전송데이터 Count 시작 */
+			Logger.debug("[1. CUBE 상품 전송데이터 조회 시작]");	
 			while(rs0.next()){
 				
 				int count 		= 0;
@@ -365,84 +370,10 @@ public class CubeAPItoMg {
 					
 					JSONObject 	jsonObject 		= new JSONObject();
 					JSONArray 	prodincArray 	= new JSONArray();
-					
-					// 품목 리시트조회
-					while(rs1.next()){
-							
-						JSONObject prodList = new JSONObject();
-					
-						/* 2. Sterling API 전송을위한 JSON_DATA 생성 시작 */
-						Logger.debug("[2. Sterling API 전송을위한 JSON_DATA 생성 시작]");					
-						Logger.debug("[org_code["+StringUtil.nullTo(rs1.getString("COCD"),"")+"]");
-						Logger.debug("[prodinc["+StringUtil.nullTo(rs1.getString("PRODINC"),"")+"]");
-						Logger.debug("[pname["+StringUtil.nullTo(rs1.getString("PNAME"),"")+"]");
-						Logger.debug("[brand_id["+StringUtil.nullTo(rs1.getString("BRAND_ID"),"")+"]");
-						Logger.debug("[brand_name["+StringUtil.nullTo(rs1.getString("BRAND_NM"),"")+"]");
-						Logger.debug("[sale_price["+StringUtil.nullTo(rs1.getString("FIPRI"),"")+"]");
-						Logger.debug("[TRAN_DATE["+StringUtil.nullTo(rs1.getString("TRAN_DATE"),"")+"]");
-						Logger.debug("[TRAN_SEQ["+StringUtil.nullTo(rs1.getString("TRAN_SEQ"),"")+"]");						
-						Logger.debug("[GOODS_CODE["+StringUtil.nullTo(rs1.getString("GOODS_CODE"),"")+"]");
-						Logger.debug("[GOODS_DETAIL["+StringUtil.nullTo(rs1.getString("GOODS_DETAIL"),"")+"]");						
-						Logger.debug("[GOODS_URL["+StringUtil.nullTo(rs1.getString("GOODS_URL"),"")+"]");						
-						Logger.debug("[SEX["+StringUtil.nullTo(rs1.getString("SEX"),"")+"]");
-						Logger.debug("[SEASON["+StringUtil.nullTo(rs1.getString("SEASON"),"")+"]");
-						Logger.debug("[GROUP_DESC["+StringUtil.nullTo(rs1.getString("GROUP_DESC"),"")+"]");
-						
-						
-						prodList.put("tran_date",StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));			// 1.[Parameter]사업부코드
-						prodList.put("tran_seq",StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));			// 2.[Parameter]사업부코드						
-						prodList.put("org_code",StringUtil.nullTo(rs1.getString("COCD"),""));				// 3.[Parameter]사업부코드
-						prodList.put("prodinc",StringUtil.nullTo(rs1.getString("PRODINC"),""));				// 4.[Parameter]스타일코드
-						prodList.put("pname",StringUtil.nullTo(rs1.getString("PNAME"),""));					// 5.[Parameter]상품명					
-						prodList.put("brand_id",StringUtil.nullTo(rs1.getString("BRAND_ID"),""));			// 6.[Parameter]브랜드ID
-						prodList.put("brand_name",StringUtil.nullTo(rs1.getString("BRAND_NM"),""));			// 7.[Parameter]브래드명
-						prodList.put("sale_price",StringUtil.nullTo(rs1.getString("FIPRI"),""));			// 8.[Parameter]최초판매가	
-						prodList.put("goods_code",StringUtil.nullTo(rs1.getString("GOODS_CODE"),""));		// 9.[Parameter]							
-						prodList.put("goods_detail",StringUtil.nullTo(rs1.getString("GOODS_DETAIL"),""));	// 10.[Parameter]	
-						prodList.put("goods_url",StringUtil.nullTo(rs1.getString("GOODS_URL"),""));			// 11.[Parameter]	
-						prodList.put("sex",StringUtil.nullTo(rs1.getString("SEX"),""));						// 12.[Parameter]	
-						prodList.put("season",StringUtil.nullTo(rs1.getString("SEASON"),""));				// 13.[Parameter]	
-						//prodList.put("group_desc",StringUtil.nullTo(rs1.getString("GROUP_DESC"),""));		// 14.[Parameter]	
-						prodList.put("group_text",StringUtil.nullTo(rs1.getString("GROUP_DESC"),""));		// 14.[Parameter] (2015.2.9 group_desc -> group_text로 수정)
-						
-						// 바코드 정보 가져오기..
-						pstmt2.setString(1, StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));
-						pstmt2.setString(2, StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));
-						pstmt2.setString(3, cocd);
-						pstmt2.setString(4, vdcd);						
-						pstmt2.setString(5, StringUtil.nullTo(rs1.getString("PRODINC"),""));
-						
-						rs2 = pstmt2.executeQuery();
-						JSONArray cellOpt = new JSONArray();
-						
-						// 'optioninfo' creation [IOS 24-MAR-16]
-						while (rs2.next()){
-						
-							JSONObject itemOption = new JSONObject();
 
-							Logger.debug("[2-1. Sterling API 전송을위한 BAR_CODE JSON_DATA 생성 시작]");							
-							Logger.debug("[ITEM_COLOR["+StringUtil.nullTo(rs2.getString("ITEM_COLOR"),"")+"]");
-							Logger.debug("[ITEM_SIZE["+StringUtil.nullTo(rs2.getString("ITEM_SIZE"),"")+"]");
-							Logger.debug("[BAR_CODE["+StringUtil.nullTo(rs2.getString("BAR_CODE"),"")+"]");
-	
-							itemOption.put("item_color", StringUtil.nullTo(rs2.getString("ITEM_COLOR"),""));	// 15.[Parameter]컬러명
-							itemOption.put("item_size", StringUtil.nullTo(rs2.getString("ITEM_SIZE"),""));		// 16.[Parameter]사이즈명
-							itemOption.put("bar_code", StringUtil.nullTo(rs2.getString("BAR_CODE"),""));		// 17.[Parameter]상품바코드
-							
-							cellOpt.add(itemOption);
-							prodList.put("optioninfo",cellOpt);
-						}										
-						prodincArray.add(prodList);
-						
-						Logger.debug("[2. Sterling API 전송을위한 JSON_DATA 생성 끝]");
-						/* 2. Sterling API 전송을위한 JSON_DATA 생성 끝 */	
-						
-						count++;		// 사업부별 성공 카운트
-						successCnt++;	// 전체 성공 카운트					
-					}
-					jsonObject.put("list", prodincArray);
-					Logger.debug("[송신데이터["+jsonObject.toString()+"]");
-					
+					//-------------------------------------------------------
+					// Product 전체단위에서 스타일 단위로 전송 변경 [IOS 29-MAR-16]
+					//-------------------------------------------------------
 					/* 3. Redis Connection 시작 */
 					Logger.debug("[3. Redis Connection 시작]");
 					
@@ -461,51 +392,125 @@ public class CubeAPItoMg {
 	
 					Logger.debug("[SEND_KEY]"+cocd+SEND_PRODUCT_KEY);
 					
-					/* 3-2 Steling OMS 전송할 상품정보 SET */				
-					/* SET */  				 
-					jedis.lpush(cocd+SEND_PRODUCT_KEY, jsonObject.toString());
-											
-					Logger.debug("[3. Redis Connection 끝]");				
-					// 3. Redis Connection 끝
+					JSONObject prodList = new JSONObject();
+					// 품목 리스트 조회
+					while(rs1.next()){
+						/* 2. Sterling API 전송을위한 JSON_DATA 생성 시작 */
+						Logger.debug("[2. Sterling API 전송을위한 JSON_DATA 생성 시작]");					
+						Logger.debug("[org_code["+StringUtil.nullTo(rs1.getString("COCD"),"")+"]");
+						Logger.debug("[prodinc["+StringUtil.nullTo(rs1.getString("PRODINC"),"")+"]");
+						Logger.debug("[pname["+StringUtil.nullTo(rs1.getString("PNAME"),"")+"]");
+						Logger.debug("[brand_id["+StringUtil.nullTo(rs1.getString("BRAND_ID"),"")+"]");
+						Logger.debug("[brand_name["+StringUtil.nullTo(rs1.getString("BRAND_NM"),"")+"]");
+						Logger.debug("[sale_price["+StringUtil.nullTo(rs1.getString("FIPRI"),"")+"]");
+						Logger.debug("[TRAN_DATE["+StringUtil.nullTo(rs1.getString("TRAN_DATE"),"")+"]");
+						Logger.debug("[TRAN_SEQ["+StringUtil.nullTo(rs1.getString("TRAN_SEQ"),"")+"]");						
+						Logger.debug("[GOODS_CODE["+StringUtil.nullTo(rs1.getString("GOODS_CODE"),"")+"]");
+						Logger.debug("[GOODS_DETAIL["+StringUtil.nullTo(rs1.getString("GOODS_DETAIL"),"")+"]");						
+						Logger.debug("[GOODS_URL["+StringUtil.nullTo(rs1.getString("GOODS_URL"),"")+"]");						
+						Logger.debug("[SEX["+StringUtil.nullTo(rs1.getString("SEX"),"")+"]");
+						Logger.debug("[SEASON["+StringUtil.nullTo(rs1.getString("SEASON"),"")+"]");
+						Logger.debug("[GROUP_DESC["+StringUtil.nullTo(rs1.getString("GROUP_DESC"),"")+"]");
+						Logger.debug("[VENDOR_ID["+StringUtil.nullTo(rs1.getString("VENDOR_ID"),"")+"]");
+						
+						prodList.put("tran_date",StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));			// 1.[Parameter]사업부코드
+						prodList.put("tran_seq",StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));			// 2.[Parameter]사업부코드						
+						prodList.put("org_code",StringUtil.nullTo(rs1.getString("COCD"),""));				// 3.[Parameter]사업부코드
+						prodList.put("prodinc",StringUtil.nullTo(rs1.getString("PRODINC"),""));				// 4.[Parameter]스타일코드
+						prodList.put("pname",StringUtil.nullTo(rs1.getString("PNAME"),""));					// 5.[Parameter]스타일명 					
+						prodList.put("brand_id",StringUtil.nullTo(rs1.getString("BRAND_ID"),""));			// 6.[Parameter]브랜드ID
+						prodList.put("brand_name",StringUtil.nullTo(rs1.getString("BRAND_NM"),""));			// 7.[Parameter]브래드명
+						prodList.put("sale_price",StringUtil.nullTo(rs1.getString("FIPRI"),""));			// 8.[Parameter]최초판매가	
+						prodList.put("goods_code",StringUtil.nullTo(rs1.getString("GOODS_CODE"),""));		// 9.[Parameter]							
+						prodList.put("goods_detail",StringUtil.nullTo(rs1.getString("GOODS_DETAIL"),""));	// 10.[Parameter]	
+						prodList.put("goods_url",StringUtil.nullTo(rs1.getString("GOODS_URL"),""));			// 11.[Parameter]	
+						prodList.put("sex",StringUtil.nullTo(rs1.getString("SEX"),""));						// 12.[Parameter]	
+						prodList.put("season",StringUtil.nullTo(rs1.getString("SEASON"),""));				// 13.[Parameter]	
+						//prodList.put("group_desc",StringUtil.nullTo(rs1.getString("GROUP_DESC"),""));		// 14.[Parameter]	
+						prodList.put("group_text",StringUtil.nullTo(rs1.getString("GROUP_DESC"),""));		// 14.[Parameter] (2015.2.9 group_desc -> group_text로 수정)
+						// inserted [IOS 29-MAR-16]
+						prodList.put("sell_code",StringUtil.nullTo(rs1.getString("VENDOR_ID"),""));			// 15.[Parameter] 쇼핑몰(거래처)
+						
+						// 바코드 정보 가져오기..
+						pstmt2.setString(1, StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));
+						pstmt2.setString(2, StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));
+						pstmt2.setString(3, cocd);
+						pstmt2.setString(4, vdcd);						
+						pstmt2.setString(5, StringUtil.nullTo(rs1.getString("PRODINC"),""));
+						
+						rs2 = pstmt2.executeQuery();
+						JSONArray cellOpt = new JSONArray();
+						
+						// 'optioninfo' creation [commented IOS 24-MAR-16]
+						while (rs2.next()){
+						
+							JSONObject itemOption = new JSONObject();
+
+							Logger.debug("[2-1. Sterling API 전송을위한 BAR_CODE JSON_DATA 생성 시작]");							
+							Logger.debug("[ITEM_COLOR["+StringUtil.nullTo(rs2.getString("ITEM_COLOR"),"")+"]");
+							Logger.debug("[ITEM_SIZE["+StringUtil.nullTo(rs2.getString("ITEM_SIZE"),"")+"]");
+							Logger.debug("[BAR_CODE["+StringUtil.nullTo(rs2.getString("BAR_CODE"),"")+"]");
+	
+							itemOption.put("item_color", StringUtil.nullTo(rs2.getString("ITEM_COLOR"),""));	// 15.[Parameter]컬러명
+							itemOption.put("item_size", StringUtil.nullTo(rs2.getString("ITEM_SIZE"),""));		// 16.[Parameter]사이즈명
+							itemOption.put("bar_code", StringUtil.nullTo(rs2.getString("BAR_CODE"),""));		// 17.[Parameter]상품바코드
+							
+							cellOpt.add(itemOption);
+							prodList.put("optioninfo",cellOpt);
+						}										
+						
+						prodincArray.add(prodList);
+						
+						Logger.debug("[2. Sterling API 전송을위한 JSON_DATA 생성 끝]");
+						/* 2. Sterling API 전송을위한 JSON_DATA 생성 끝 */	
+						
+						count++;		// 사업부별 성공 카운트
+						successCnt++;	// 전체 성공 카운트
 					
-				}else{
-					
+						jsonObject.put("list", prodincArray);
+						Logger.debug("[송신데이터["+jsonObject.toString()+"]");
+						
+						// Key construction 
+						// E.g. 90:SDRY:~~
+						// [IOS 29-MAR-16]
+						jedis.lpush(cocd + ":" + StringUtil.nullTo(rs1.getString("VENDOR_ID"), "") +SEND_PRODUCT_KEY, jsonObject.toString());
+						
+						prodList.clear();
+						prodincArray.clear();
+						jsonObject.clear();
+						
+						Logger.debug("[3. Redis Connection 끝]");
+						
+					} // 전송단위 JSON 생성 및 건별 전송 완료 [IOS 29-MAR-16] 
+				} else  {
 					errCnt++;	// 사업부별 실패 카운트
 				}
-				
 				sqlBuffer4.append("사업부["+cocd+"] 정상:"+count+"/ 실패:"+errCnt+"  "); 
 			}
 			
-			if(successCnt > 0){
+			if (successCnt > 0)  {
 				sendMessage = "SUCCESS !!!!! ["+sqlBuffer4.toString()+"]";
-			}else{
+			} else  {
 				sendMessage = "NO DATA !!!!! [ 송신할 상품정보가 존재하지 않습니다. ]";
 			}
-
 		} catch(SQLException e) {
-			
 			conn.rollback();			
 			Logger.debug("###Error###:"+ methodName +" Error sql:"+ e.toString());			
 			
 			sendMessage = "FAIL!["+e.toString()+"]";			
-		
-		} catch(JedisConnectionException e) {
-
+		} catch (JedisConnectionException e)  {
 			Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());
 			
 			/* Redis connection 제거*/
 			//if( jedisPool!= null )jedisPool.returnBrokenResource(jedis); jedisPool = null;
 			
 			sendMessage = "FAIL!!["+e.toString()+"]";
-			
 		} catch(Exception e) {
 			Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());
 			
 			sendMessage = "FAIL!!!["+e.toString()+"]";
-		
-		}finally {
-			try 
-			{
+		} finally  {
+			try  {
 				conn.setAutoCommit(true);
 				
 				if( rs0 !=null ) try{ rs0.close(); rs0 = null; }catch(Exception e){}finally{rs0 = null;}
@@ -520,16 +525,11 @@ public class CubeAPItoMg {
 				if(conn	!= null ) try{ conn.close(); conn = null; }catch(Exception e){}finally{conn = null;}		
 				if(jedis!= null ) try{ jedis.disconnect(); jedis = null; }catch(Exception e){}finally{jedis = null;}
 				//if(jedisPool!= null ) try{ jedisPool.destroy(); jedisPool = null; }catch(Exception e){}finally{jedisPool = null;}				
-				
-			} 
-		    catch (Exception e) 
-		    {
-
+			} catch (Exception e)  {
 		    	Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());						
 				sendMessage = "FAIL!!!!["+e.toString()+"]";
 		    }
 		}
-
 		return sendMessage;
 	}
 
@@ -580,15 +580,15 @@ public class CubeAPItoMg {
 			conn =	DataBaseManager.getConnection(dbmode);		
 			conn.setAutoCommit(false);
 
-			Logger.debug("0. Sterling 상품 수신후 UPDATE SQL 작성 시작");
+			Logger.debug("0. Magento 상품 수신후 UPDATE SQL 작성 시작");
 			
 			sqlBuffer0.append("SELECT   RETC AS COCD											\n");	
-			sqlBuffer0.append("       , CD4  AS VDCD											\n");			
+			sqlBuffer0.append("       , REFCD  AS VDCD											\n");			
 			sqlBuffer0.append("  FROM TBB150					    							\n");	
 			sqlBuffer0.append(" WHERE REFTP = 'ZY'												\n");	
 			sqlBuffer0.append("   AND REFCD <> '0000'											\n");	
 			sqlBuffer0.append("   AND CD4   = '"+ transCD +"'						    		\n");	
-			sqlBuffer0.append("   GROUP BY RETC, CD4						    				\n");
+			sqlBuffer0.append("   GROUP BY RETC, REFCD						    				\n");
 			
 			/* 0. Sterling 상품 수신후 UPDATE SQL 작성 시작*/
 			/* 0-1. 주 쿼리문*/
@@ -606,7 +606,7 @@ public class CubeAPItoMg {
 			/* 0-3. 카운트 쿼리문*/
 			
 			/* 0. Sterling 상품 수신후 UPDATE SQL 작성 끝*/
-			Logger.debug("0. Sterling 상품 수신후 UPDATE SQL 작성  끝");
+			Logger.debug("0. Magento 상품 수신후 UPDATE SQL 작성  끝");
 						
 			/* 1. Redis connection 생성 */				
 			Logger.debug("1. Redis connection 생성 시작");
@@ -627,17 +627,19 @@ public class CubeAPItoMg {
 			while(rs0.next()){
 
 				String cocd = StringUtil.nullTo(rs0.getString("COCD"),"");
+				String vdcd = StringUtil.nullTo(rs0.getString("VDCD"),"");
+				
 				
 			    int count 	= 0;
 			    int errcnt 	= 0;
-				int redisCnt 	= jedis.llen(cocd+RECV_PRODUCT_KEY ).intValue();
+				int redisCnt 	= jedis.llen(cocd+":"+ vdcd +RECV_PRODUCT_KEY ).intValue();
 								
 				Logger.debug("[COCD["+StringUtil.nullTo(rs0.getString("COCD"),"")+"]");		// 사업부코드
 				Logger.debug("[VDCD["+StringUtil.nullTo(rs0.getString("VDCD"),"")+"]");		// SHOP_ID				
 				Logger.debug("상품수신-REDIS_KEY["+cocd+RECV_PRODUCT_KEY+"]");
 				Logger.debug("상품수신-REDIS_COUNT["+redisCnt+"]");				
 				
-				/* 2. Sterling 수신데이터 처리 시작 */	
+				/* 2. Magento 수신데이터 처리 시작 */	
 				Logger.debug("2. Sterling 수신데이터 처리 시작");
 				if(redisCnt > 0){
 					
@@ -645,13 +647,14 @@ public class CubeAPItoMg {
 					String tranSeq		= "";	// 전송순번					
 					String org_code		= "";	// 사업부코드
 					String prodinc		= "";	// 스타일코드
-					String statuscd 	= "";	// 처리상태				    
+					String statuscd 	= "";	// 처리상태		
+					String sell_code 	= "";	// 쇼핑몰(거래처)	[IOS 30-MAR-16]
 					
 					for (int j = 0; j < redisCnt; j++){
 						
-						String  jsonString 	= StringUtil.nullTo(jedis.rpop(cocd+RECV_PRODUCT_KEY),"");
+						String  jsonString 	= StringUtil.nullTo(jedis.rpop(cocd+":"+ vdcd +RECV_PRODUCT_KEY),""); 
 						String 	jsonData 	= URLDecoder.decode(jsonString,"UTF-8");
-						Logger.debug("SC API 상품처리결과 DATA["+jsonString+"]");	
+						Logger.debug("Magento 상품처리결과 DATA["+jsonString+"]");	
 						
 						JSONObject 	json 		= JSONObject.fromObject(jsonData);
 						JSONArray 	prodArray 	= json.getJSONArray("list");				
@@ -661,7 +664,6 @@ public class CubeAPItoMg {
 						Logger.debug(cocd+"_size["+prodArray.size()+"]");
 						
 						for (int i = 0; i < prodArray.size(); i++){
-							
 							JSONObject prodList = prodArray.getJSONObject(i);
 	
 							tranDate 	= StringUtil.nullTo(prodList.getString("tran_date"),"");	// 1.[Parameter] 전송날짜
@@ -669,12 +671,14 @@ public class CubeAPItoMg {
 							org_code 	= StringUtil.nullTo(prodList.getString("org_code"),"");		// 3.[Parameter] 사업부코드
 							prodinc 	= StringUtil.nullTo(prodList.getString("prodinc"),"");		// 4.[Parameter] 스타일코드
 							statuscd 	= StringUtil.nullTo(prodList.getString("statuscd"),""); 	// 5.[Parameter] 처리상태
+							sell_code 	= StringUtil.nullTo(prodList.getString("sell_code"),""); 	// 6.[Parameter] 처리상태	// 추가 [IOS 29-MAR-16]
 		
 							Logger.debug("tranDate["+tranDate+"]");
 							Logger.debug("tranSeq["+tranSeq+"]");
 							Logger.debug("org_code["+org_code+"]");
 							Logger.debug("prodinc["+prodinc+"]");
 							Logger.debug("statuscd["+statuscd+"]");
+							Logger.debug("sell_code["+sell_code+"]");
 							
 							//품목 전송 결과 업데이트..
 							if (pstmt1 != null) { pstmt1.close(); pstmt1 = null; }
@@ -812,12 +816,12 @@ public class CubeAPItoMg {
 			Logger.debug("0. Sterling 재고 송신 SQL 시작");
 			
 			sqlBuffer0.append("SELECT   RETC AS COCD				\n");	
-			sqlBuffer0.append("       , CD4  AS VDCD				\n");			
+			sqlBuffer0.append("       , CD1  AS VDCD				\n");			
 			sqlBuffer0.append("  FROM TBB150					    \n");	
 			sqlBuffer0.append(" WHERE REFTP = 'ZY'					\n");	
 			sqlBuffer0.append("   AND REFCD <> '0000'				\n");	
 			sqlBuffer0.append("   AND CD4   = '"+ transCD +"'		\n");	
-			sqlBuffer0.append("   GROUP BY RETC, CD4				\n");
+			sqlBuffer0.append("   GROUP BY RETC, CD1				\n");
 						
 			sqlBuffer1.append("SELECT   A.TRAN_DATE AS TRAN_DATE    \n");
 			sqlBuffer1.append("        ,A.TRAN_SEQ  AS TRAN_SEQ     \n");
@@ -958,14 +962,16 @@ public class CubeAPItoMg {
 	    					asrrotList.put("tran_date",StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));	// 전송날짜
 	    					asrrotList.put("tran_seq",StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));		// 전송순번	    					
 	    					asrrotList.put("org_code",cocd);												// 사업부코드	    					
-	    					asrrotList.put("ship_node",StringUtil.nullTo(rs1.getString("WHCD"),""));		// 창고코드
+	    					asrrotList.put("sell_code",StringUtil.nullTo(rs1.getString("VENDOR_ID"),""));	// 쇼핑몰(거래처) 추가 [IOS 30-MAR-16] 
+	    					//asrrotList.put("ship_node",StringUtil.nullTo(rs1.getString("WHCD"),""));		// 창고코드 // 삭제 [IOS 30-MAR-16]
 	    					asrrotList.put("bar_code",StringUtil.nullTo(rs1.getString("BARCODE"),""));		// 상품코드
 	    					asrrotList.put("qty",StringUtil.nullTo(rs1.getString("STOCK"),""));				// 수량
-	    					asrrotList.put("uom","EACH");													// 측정단위 ( SC 고정값 )
+	    					//asrrotList.put("uom","EACH");													// 측정단위 ( SC 고정값 ) // 삭제 [IOS 30-MAR-16]
 	    					
 	        				Logger.debug("tran_date["+StringUtil.nullTo(rs1.getString("TRAN_DATE"),"")+"]");	    					
 	        				Logger.debug("tran_seq["+StringUtil.nullTo(rs1.getString("TRAN_SEQ"),"")+"]");
-	    					Logger.debug("ship_node["+StringUtil.nullTo(rs1.getString("WHCD"),"")+"]");
+	        				Logger.debug("sell_code["+StringUtil.nullTo(rs1.getString("VENDOR_ID"),"")+"]");	// 쇼핑몰(거래처) 추가 [IOS 30-MAR-16] 
+	        				Logger.debug("ship_node["+StringUtil.nullTo(rs1.getString("WHCD"),"")+"]");
 	    					Logger.debug("bar_code["+StringUtil.nullTo(rs1.getString("BARCODE"),"")+"]");
 	        				Logger.debug("qty["+StringUtil.nullTo(rs1.getString("STOCK"),"")+"]");
 	        				
@@ -990,7 +996,6 @@ public class CubeAPItoMg {
 						Logger.debug("[재고SEND_KEY]"+cocd+SEND_INVENTORY_KEY);
 						
 						/* 3-1 Steling OMS 전송할 재고정보 SET */				
-						/* SET */  				 
 						jedis.lpush(cocd+SEND_INVENTORY_KEY, jsonObject.toString());
 											
 						Logger.debug("[3. Redis Connection 끝]");				
@@ -1322,13 +1327,8 @@ public class CubeAPItoMg {
 		String methodName ="com.service.CubeAPItoMg.api_Auto_PO()";
 		Logger.debug(methodName);
 		
-		/* JDBC Connection 변수 선언 */		
 		Connection 		conn	= null;
-		
-		/* Redis 선언 */
 		Jedis 			jedis   = null;
-
-		/* PreparedStatement 선언 */
 		PreparedStatement	pstmt		= null;
 		
 		List<Object> vendorList 	= null;
@@ -1337,16 +1337,13 @@ public class CubeAPItoMg {
 		StringBuffer	resultBuffer  	= new StringBuffer(500);	// 결과메세지 
 		StringBuffer   	sqlBuffer  		= new StringBuffer(500);	// 서브쿼리문
 		
-		/* String 변수선언  */			
 		String call_seq 	= "";		
 		String sendMessage 	= null;
 		String succStr 		= "";
-		String processNm	= "";
 
 		int	   succCnt		= 0;
 		
 		try {
-
 			conn = DataBaseManager.getConnection(dbmode);
 			CubeService cubeDao = CubeService.getInstance();
 			ServiceDAO 	dao = new ServiceDAO();
@@ -1381,7 +1378,6 @@ public class CubeAPItoMg {
 					
 				
 				for (int i = 0; i < vendorList.size(); i++) {
-					
 					getHm = (HashMap)vendorList.get(i);
 					
 					String org_code 	= StringUtil.nullTo((String)getHm.get("COCD"),"");
@@ -1398,7 +1394,6 @@ public class CubeAPItoMg {
 					
 					Logger.debug("2. Sterling OrderProcess 수신데이터 처리 시작");
 					if(redisCnt > 0){
-		
 						String status			= "";
 						String tranDt			= "";						
 						String rtCocd			= "";		// 신규
@@ -1452,7 +1447,7 @@ public class CubeAPItoMg {
 
 							String command			= "";							
 							String  jsonString = StringUtil.nullTo(jedis.rpop(org_code+":"+sell_code+RECV_ORDER),"");
-							Logger.debug("SC API OrderProcess 수신 DATA["+jsonString+"]");					
+							Logger.debug("Mg API OrderProcess 수신 DATA["+jsonString+"]");					
 							
 							int    insertErrCnt = 0;
 
@@ -1496,8 +1491,6 @@ public class CubeAPItoMg {
 							}else{
 								command = "NOT PROCESS STATUS";
 							}
-							
-							processNm = cubeDao.getApiName(command);
 							
 							Logger.debug("처리업무구분["+command+"]");
 							if(command.equals("OrderRetrieve") || command.equals("OrderCancelRetrieve")){
@@ -1656,7 +1649,7 @@ public class CubeAPItoMg {
 								Logger.debug("insertErrCnt["+insertErrCnt+"]");	
 								
 								// 정상
-								if(insertErrCnt == 0){
+								if (insertErrCnt == 0)  {
 										
 									Logger.debug("API_RECV_DATA INSERT 정상");
 	
@@ -1673,18 +1666,13 @@ public class CubeAPItoMg {
 									
 
 									Logger.debug(" 프로시져 콜 시작");
-									//resultBuffer.append("{"+processNm+"}사업부["+org_code+":"+sell_code+"]SUCESS!");							
-									//cubeDao.callProcedure(dbmode, command, CommonUtil.getCurrentDate(), call_seq, rtOrderKey, tranDt, rtOrder_id, transCD, rtQrder_dt, org_code, sell_code);
 									cubeDao.callProcedure2(dbmode, command, CommonUtil.getCurrentDate(), call_seq, rtOrderKey, tranDt, rtOrder_id, transCD, rtQrder_dt, org_code, sell_code, dInfo);
 									Logger.debug(" 프로시져 콜 끝");
 									
 									orgCnt++; // 사업부별 정상카운트
 									succCnt++;
-									
-								}else{ // API_RECV_DATA TABLE INSERT 오류시!!!!!
-	
+								} else  { // API_RECV_DATA TABLE INSERT 오류시!!!!!
 									Logger.debug("API_RECV_DATA INSERT 실패");
-									//resultBuffer.append("{"+processNm+"}사업부["+org_code+":"+sell_code+"]API_RECV_DATA INSERT ERROR!["+rtOrderId+"]");
 									
 									//전송대상 BARCODE 전송 결과 업데이트..
 									if (pstmt != null) { pstmt.close(); pstmt = null; }
@@ -1704,9 +1692,7 @@ public class CubeAPItoMg {
 								
 								Logger.debug("2-2. callProcedure 요청 끝");
 								/* 2-2. callProcedure 요청 끝 */
-								
-							}else{
-															
+							} else  {	// if error 
 								//resultBuffer.append("사업부["+org_code+":"+sell_code+"] 주문/주문취소 프로세스 진행상태가 아닙니다. ");
 								cubeDao.setRecvLog(dbmode, "scAPI", command, "주문번호["+rtOrder_id+"]가 처리가능한상태["+status+"]가 아닙니다", sell_code, toDay, toDay, "100", "FAIL!(처리상태오류)", transCD);
 	
@@ -1715,30 +1701,23 @@ public class CubeAPItoMg {
 								
 								orgErrCnt++;
 							}							
-							
 						} // end-for (REDIS)
-						
 						resultBuffer.append("사업부["+org_code+":"+sell_code+"]처리("+orgCnt+")건/실패("+orgErrCnt+")건  ");						
-						
-					} else {
-						
+					} else  {
 						resultBuffer.append(" 사업부["+org_code+":"+sell_code+"]NO DATA! 주문내역없음.  ");
 						succStr = "조회된데이터가 없습니다.";
 						cubeDao.setRecvLog(dbmode, "SCAPI", processCmd, "발주요청",sell_code, toDay, toDay, "100", succStr, transCD);
 					}
 					
-					
 					Logger.debug("2. Sterling OrderProcess 수신데이터 처리 끝");
 					/* 2. Sterling 출고의로 수신데이터 처리 끝 */
 				}
 												
-				if(succCnt > 0){
+				if (succCnt > 0) {
 					succStr = "SUCCES!";
-				}else{
+				} else  {
 					succStr = "FAIL!";
 				}
-				
-
 			} else {
 				succStr = "FAIL!.";
 				resultBuffer.append("NO DATA!! 조회된 사업부가 없습니다.");		
@@ -1766,8 +1745,7 @@ public class CubeAPItoMg {
 			
 		} finally {
 			
-			try 
-		    {
+			try  {
 				conn.setAutoCommit(true);	
 				
 				if(jedis!= null ) try{ jedis.disconnect(); jedis = null; }catch(Exception e){}finally{jedis = null;}
@@ -1776,14 +1754,11 @@ public class CubeAPItoMg {
 				DataBaseManager.close(conn, dbmode);
 				if( conn!= null ) try{conn.close(); conn = null; }catch(Exception e){}finally{conn = null;}
 		    } 
-		    catch (Exception e) 
-		    {
+		    catch (Exception e)  {
 		    	Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());
 		    }
 		}
-		
 		return sendMessage;
-		
 	}
 	
 	/**
@@ -2768,7 +2743,6 @@ public class CubeAPItoMg {
 		String call_seq 	= "";		
 		String sendMessage 	= null;
 		String succStr 		= "";
-		String processNm	= "";
 
 		int	   succCnt		= 0;
 		
@@ -2921,8 +2895,6 @@ public class CubeAPItoMg {
 							}else{
 								command = "NOT PROCESS STATUS";
 							}
-							
-							processNm = cubeDao.getApiName(command);
 							
 							Logger.debug("처리업무구분["+command+"]");
 							if(command.equals("OrderReturnRetrieve") || command.equals("OrderReturnCancelRetrieve")){
