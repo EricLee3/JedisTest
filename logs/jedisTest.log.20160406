@@ -1,0 +1,161 @@
+2016-04-06 09:08:32,651 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Auto_PO()
+2016-04-06 09:08:33,156 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:08:33,249 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-06 09:08:33,301 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:08:33,415 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:08:33,422 [DEBUG] [nohup ] - vendorList[3]
+2016-04-06 09:08:33,422 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-06 09:08:33,448 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-06 09:08:33,450 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:08:33,450 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-06 09:08:33,450 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:update:M2C]
+2016-04-06 09:08:33,450 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:08:33,450 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:08:33,512 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:08:33,517 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:08:33,589 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0001, OrderProcess, 발주요청, ASPB, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:08:33,638 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:08:33,641 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:08:33,644 [DEBUG] [nohup ] - org_code[45]
+2016-04-06 09:08:33,644 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-06 09:08:33,644 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:update:M2C]
+2016-04-06 09:08:33,644 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:08:33,644 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:08:33,694 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:08:33,694 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:08:33,701 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0002, OrderProcess, 발주요청, REDM, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:08:33,712 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:08:33,715 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:08:33,718 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:08:33,718 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-06 09:08:33,718 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:update:M2C]
+2016-04-06 09:08:33,718 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:08:33,718 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:08:33,763 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:08:33,763 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:08:33,770 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0003, OrderProcess, 발주요청, SDRY, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:08:33,784 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:08:33,787 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:08:33,788 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:09:12,650 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Auto_PO()
+2016-04-06 09:09:19,760 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:09:25,939 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-06 09:09:26,017 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:09:26,037 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:09:50,993 [DEBUG] [nohup ] - vendorList[3]
+2016-04-06 09:09:53,784 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-06 09:09:59,609 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-06 09:10:38,322 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:10:38,324 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-06 09:10:38,324 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:update:M2C]
+2016-04-06 09:10:38,324 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:10:38,324 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:10:38,879 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:10:38,879 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:10:38,890 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0004, OrderProcess, 발주요청, ASPB, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:10:38,904 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:10:38,907 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:10:38,911 [DEBUG] [nohup ] - org_code[45]
+2016-04-06 09:10:38,911 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-06 09:10:38,911 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:update:M2C]
+2016-04-06 09:10:38,912 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:10:38,912 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:10:38,971 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:10:38,971 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:10:38,979 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0005, OrderProcess, 발주요청, REDM, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:10:39,035 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:10:39,039 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:10:39,042 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:10:39,042 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-06 09:10:39,042 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:update:M2C]
+2016-04-06 09:10:39,042 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:10:39,042 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:10:39,093 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:10:39,093 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:10:39,102 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0006, OrderProcess, 발주요청, SDRY, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:10:39,125 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:10:39,129 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:10:39,129 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:11:21,922 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Auto_PO()
+2016-04-06 09:11:21,983 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:11:21,983 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-06 09:11:22,042 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:11:22,059 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:11:22,062 [DEBUG] [nohup ] - vendorList[3]
+2016-04-06 09:11:22,062 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-06 09:11:22,068 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-06 09:11:50,737 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:11:52,405 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-06 09:11:52,926 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:update:M2C]
+2016-04-06 09:11:53,406 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:11:53,951 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:12:00,443 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:12:00,443 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:12:00,453 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0007, OrderProcess, 발주요청, ASPB, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:12:00,535 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:12:01,475 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:12:20,020 [DEBUG] [nohup ] - org_code[45]
+2016-04-06 09:12:20,233 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-06 09:12:20,447 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:update:M2C]
+2016-04-06 09:12:20,678 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:12:20,866 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:12:22,235 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:12:22,236 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:12:22,247 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0008, OrderProcess, 발주요청, REDM, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:12:22,260 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:12:22,813 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:15:17,217 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Auto_PO()
+2016-04-06 09:15:18,466 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:15:18,557 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-06 09:15:19,536 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:15:19,637 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:15:19,650 [DEBUG] [nohup ] - vendorList[3]
+2016-04-06 09:15:19,650 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-06 09:15:19,685 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-06 09:15:38,264 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:15:38,264 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-06 09:15:38,264 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-06 09:15:38,264 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:15:38,264 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:15:40,711 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:15:40,716 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:15:40,745 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0009, OrderProcess, 발주요청, ASPB, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:15:40,804 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:15:40,808 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:15:59,694 [DEBUG] [nohup ] - org_code[45]
+2016-04-06 09:15:59,695 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-06 09:15:59,695 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-06 09:15:59,695 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-06 09:15:59,695 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:16:01,491 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-06 09:16:01,492 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-06 09:16:01,668 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160406, 0010, OrderProcess, 발주요청, REDM, 20160406, 20160406, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-06 09:16:01,690 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-06 09:16:01,695 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-06 09:16:10,670 [DEBUG] [nohup ] - org_code[95]
+2016-04-06 09:16:11,285 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-06 09:16:11,804 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-06 09:16:12,245 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[4]
+2016-04-06 09:16:14,404 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-06 09:17:13,731 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{"orderDt":"","orderId":"100001462","status":"3200","tranDt":"2016-04-01 08:47:28","vendor_id":"","channelOrderNo":"","list":null}]
+2016-04-06 09:17:26,179 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_Auto_PO() Error :net.sf.json.JSONException: JSONObject["list"] is not a JSONArray.

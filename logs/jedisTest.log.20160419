@@ -1,0 +1,668 @@
+2016-04-19 10:34:46,828 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 10:34:47,291 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:34:47,291 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 10:34:47,341 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:34:47,358 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:34:47,361 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 10:34:47,361 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 10:34:47,367 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 10:34:47,370 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 10:34:48,784 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 10:34:48,784 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 10:34:48,860 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:34:48,860 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - 0001
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getCall_seq0001
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 10:34:48,900 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0001, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 10:35:29,699 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:35:57,624 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 10:36:02,813 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 10:36:02,813 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 10:36:04,311 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:36:04,311 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - 0002
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getCall_seq0002
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 10:36:04,586 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 10:36:04,587 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 10:36:04,587 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 10:36:04,587 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0002, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 10:36:08,984 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:36:14,705 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 10:36:16,625 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 10:36:17,221 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 10:36:20,705 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 10:37:29,887 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 10:37:31,979 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 10:37:34,049 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 10:39:45,415 [DEBUG] [nohup ] -  Query: SELECT  A.WHCD  					  AS  WHCD				                                                                	  , A.POSEQ 					  AS  ORDER_SEQ                                                                        		  , A.ORDERLINEKEY                AS  ORDERLINEKEY                                                          				  , A.ORDERRELEASEKEY        	  AS  ORDERRELEASEKEY																		  , A.RENO                        AS  RENO                                                                     				  , SUBSTR(A.UPDTIME, 9, 6)       AS  UPDTIME                                                                  				  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(UPDTIME, 9, 6)         AS  OUTTIME                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 10:39:48,474 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 10:41:05,921 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 10:41:14,531 [DEBUG] [nohup ] - ORDERLINEKEY[]
+2016-04-19 10:41:15,318 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 10:41:15,819 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 10:41:16,235 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 10:41:50,907 [DEBUG] [nohup ] - 1-2.1. 출고확정 송신 SEND_LOG 시작
+2016-04-19 10:42:07,759 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:42:10,373 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 10:42:10,382 [DEBUG] [nohup ] - 0003
+2016-04-19 10:42:27,954 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 10:42:29,613 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 10:42:30,769 [DEBUG] [nohup ] - getCall_seq0003
+2016-04-19 10:42:31,286 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 10:42:31,761 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 10:42:32,242 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-19 10:42:32,741 [DEBUG] [nohup ] - getShip_id
+2016-04-19 10:42:33,256 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 10:42:33,774 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 10:42:34,242 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 10:42:34,675 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 10:42:35,176 [DEBUG] [nohup ] - getResult_code000
+2016-04-19 10:42:35,653 [DEBUG] [nohup ] - getResult_nameSUCCESS!
+2016-04-19 10:42:36,181 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 10:42:36,761 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 10:43:17,865 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0003, DeliveryInsert, 배송정보등록, SDRY, , N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+
+2016-04-19 10:45:56,822 [ERROR] [nohup ] - java.sql.SQLException: ORA-02290: 체크 제약조건(ISECCUBE.SYS_C006910)이 위배되었습니다
+ Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0003, DeliveryInsert, 배송정보등록, SDRY, , N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setSendLog(ServiceDAO.java:276)
+	at com.service.CubeService.setSendLog(CubeService.java:1336)
+	at com.service.CubeAPItoMg.api_Delivery_Send(CubeAPItoMg.java:2391)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:156)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-19 10:46:08,408 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:46:11,879 [DEBUG] [nohup ] - 1-2.1. 출고확정 송신 SEND_LOG 끝
+2016-04-19 10:46:13,257 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 끝
+2016-04-19 10:46:31,333 [DEBUG] [nohup ] - [출고확정SEND_KEY]95:SDRY:order:update:C2M
+2016-04-19 10:46:32,211 [DEBUG] [nohup ] - 1-3. 출고확정 송신 REDIS 시작
+2016-04-19 10:46:35,466 [DEBUG] [nohup ] - 1-3. 출고확정 송신 REDIS 끝
+2016-04-19 10:46:37,391 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 끝
+2016-04-19 10:46:44,206 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 끝
+2016-04-19 10:46:49,493 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:52:15,088 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 10:52:15,456 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:52:15,456 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 10:52:15,500 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:52:15,611 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:52:15,613 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 10:52:15,613 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 10:52:15,619 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 10:52:22,877 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 10:52:23,535 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 10:52:23,535 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 10:52:23,579 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:52:23,579 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - 0003
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getCall_seq0003
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 10:52:23,606 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 10:52:23,607 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 10:52:23,607 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0003, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 10:52:25,563 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 10:52:27,677 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 10:52:27,710 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 10:52:27,710 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 10:52:27,761 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 10:52:27,761 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - 0004
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getCall_seq0004
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 10:52:27,766 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 10:52:27,767 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 10:52:27,767 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 10:52:27,767 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 10:52:27,767 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0004, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 10:52:31,366 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 11:53:41,916 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               									  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 11:53:42,970 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 11:53:50,504 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  			  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  				  , A.QTY    				      AS  QTY     	                                                             				  , A.BARCODE      				  AS  BARCODE                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 11:54:01,870 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 11:54:01,870 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 11:54:01,870 [DEBUG] [nohup ] - ORDERLINEKEY[1572]
+2016-04-19 11:54:01,870 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 11:54:01,871 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 11:54:01,871 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 11:54:01,871 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_Delivery_Send() Error :java.lang.ClassCastException: java.math.BigDecimal cannot be cast to java.lang.String
+2016-04-19 11:54:01,872 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 11:55:02,633 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 11:55:03,254 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 11:55:03,277 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 11:55:03,864 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 11:55:04,352 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 11:55:04,357 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 11:55:04,357 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 11:55:04,385 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 11:55:08,719 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 11:55:08,820 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 11:55:08,820 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 11:55:09,765 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 11:55:09,766 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 11:55:09,809 [DEBUG] [nohup ] - 0005
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getCall_seq0005
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 11:55:09,813 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 11:55:09,814 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0005, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 11:55:12,696 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 11:55:16,281 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 11:55:23,264 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 11:55:23,265 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 11:55:24,969 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 11:55:24,969 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 11:55:25,502 [DEBUG] [nohup ] - 0006
+2016-04-19 11:55:25,502 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getCall_seq0006
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 11:55:25,503 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 11:55:25,504 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 11:55:25,504 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 11:55:25,504 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 11:55:25,504 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0006, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 11:55:27,694 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 11:55:34,948 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 11:55:54,181 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 11:55:56,337 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 11:56:09,930 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 11:56:36,362 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 11:56:37,804 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 11:56:38,457 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 11:56:54,055 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  			  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  				  , A.QTY    				      AS  QTY     	                                                             				  , A.BARCODE      				  AS  BARCODE                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 13:09:58,103 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 13:10:30,657 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 13:10:31,631 [DEBUG] [nohup ] - ORDERLINEKEY[1572]
+2016-04-19 13:10:32,280 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 13:10:33,359 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 13:10:33,917 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 13:11:24,265 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_Delivery_Send() Error :java.lang.ClassCastException: java.math.BigDecimal cannot be cast to java.lang.String
+2016-04-19 13:11:24,265 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:11:28,937 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 13:11:29,515 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:11:29,515 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 13:11:29,571 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:11:29,623 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:11:29,627 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 13:11:29,628 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 13:11:29,634 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 13:11:31,408 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:11:32,582 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:11:32,582 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:11:32,672 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:11:32,672 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:11:32,685 [DEBUG] [nohup ] - 0007
+2016-04-19 13:11:32,685 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:11:32,685 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getCall_seq0007
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:11:32,686 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0007, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:11:33,960 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:11:36,085 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:11:36,116 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:11:36,116 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:11:36,192 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:11:36,192 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] - 0008
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] - getCall_seq0008
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:11:36,205 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:11:36,206 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0008, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:11:37,691 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:11:39,630 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:11:39,661 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:11:39,661 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 13:11:39,661 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 13:11:39,662 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 13:11:39,662 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 13:11:39,662 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 13:11:42,089 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  			  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  				  , A.QTY    				      AS  QTY     	                                                             				  , A.BARCODE      				  AS  BARCODE                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 13:11:42,565 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 13:11:42,566 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 13:11:42,566 [DEBUG] [nohup ] - ORDERLINEKEY[1572]
+2016-04-19 13:11:42,566 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 13:11:42,566 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 13:11:42,566 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 13:14:36,429 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_Delivery_Send() Error :java.lang.ClassCastException: java.math.BigDecimal cannot be cast to java.lang.String
+2016-04-19 13:14:36,430 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:14:40,646 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 13:14:41,400 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:14:41,400 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 13:14:41,452 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:14:41,466 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:14:41,469 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 13:14:41,469 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 13:14:41,475 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 13:14:44,435 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:14:44,488 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:14:44,488 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:14:44,545 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:14:44,545 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - 0009
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getCall_seq0009
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:14:44,552 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:14:44,553 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0009, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:14:45,750 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:14:47,125 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:14:47,155 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:14:47,155 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:14:47,217 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:14:47,217 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:14:47,225 [DEBUG] [nohup ] - 0010
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getCall_seq0010
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:14:47,226 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0010, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:14:48,572 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:14:51,411 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 13:14:51,445 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 13:14:52,730 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  			  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  				  , A.QTY    				      AS  QTY     	                                                             				  , A.BARCODE      				  AS  BARCODE                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - ORDERLINEKEY[1572]
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 13:14:52,742 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 13:15:58,032 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 13:15:58,480 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:15:58,497 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 13:15:58,655 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:15:58,787 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:15:58,791 [DEBUG] [nohup ] - vendorList[3]
+2016-04-19 13:15:58,791 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 13:15:58,840 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 13:16:01,140 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-19 13:16:01,143 [ERROR] [nohup ] - java.sql.SQLException: No suitable driver found for jdbc:oracle:thin:@220.117.243.24:1521:CBUTF8
+	at java.sql.DriverManager.getConnection(DriverManager.java:689)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at com.service.command.connection.DataBaseManager.getConnection(DataBaseManager.java:94)
+	at com.service.CubeAPItoMg.api_Delivery_Send(CubeAPItoMg.java:2255)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:156)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:318)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-19 13:16:01,143 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-19 13:16:01,144 [ERROR] [nohup ] - java.sql.SQLException: No suitable driver found for jdbc:oracle:thin:@220.117.243.24:1521:CBUTF8
+	at java.sql.DriverManager.getConnection(DriverManager.java:689)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at com.service.command.connection.DataBaseManager.getConnection(DataBaseManager.java:94)
+	at com.service.CubeAPItoMg.GetVendorList(CubeAPItoMg.java:134)
+	at com.service.CubeAPItoMg.api_Delivery_Send(CubeAPItoMg.java:2259)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:156)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:318)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-19 13:16:01,144 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.GetVendorList() Error :java.lang.NullPointerException
+2016-04-19 13:16:01,145 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:16:01,145 [ERROR] [nohup ] - java.lang.NullPointerException
+	at com.service.command.connection.DataBaseManager.close(DataBaseManager.java:132)
+	at com.service.CubeAPItoMg.GetVendorList(CubeAPItoMg.java:185)
+	at com.service.CubeAPItoMg.api_Delivery_Send(CubeAPItoMg.java:2259)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:156)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:318)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-19 13:16:01,146 [DEBUG] [nohup ] - vendorList[0]
+2016-04-19 13:16:01,146 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-19 13:16:01,152 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-19 13:16:01,152 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 끝
+2016-04-19 13:16:01,152 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_Delivery_Send() Error :java.lang.NullPointerException
+2016-04-19 13:16:03,743 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:16:07,340 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:16:07,340 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:16:10,620 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:16:10,621 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:16:10,873 [DEBUG] [nohup ] - 0011
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] - getCall_seq0011
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:16:10,874 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:16:10,875 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0011, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:16:13,521 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:16:15,282 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:16:33,237 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:16:33,237 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-19 13:16:33,392 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:16:33,392 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - 0012
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getCall_seq0012
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getResult_code100
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:16:33,398 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0012, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-19 13:16:35,385 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:16:37,986 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-19 13:16:40,403 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-19 13:16:40,403 [DEBUG] [nohup ] - 출고확정 송신건수[1]
+2016-04-19 13:16:40,403 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 시작
+2016-04-19 13:16:40,419 [DEBUG] [nohup ] - COCD[95]
+2016-04-19 13:16:40,419 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-19 13:16:40,419 [DEBUG] [nohup ] - PONO[100001469]
+2016-04-19 13:16:43,242 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  			  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  				  , A.QTY    				      AS  QTY     	                                                             				  , A.BARCODE      				  AS  BARCODE                                                                  			  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001469'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                             					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                          Parameters: []
+
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 시작
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - ORDERLINEKEY[1572]
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - OUTDT[20160419]
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - EXPNM[]
+2016-04-19 13:16:43,252 [DEBUG] [nohup ] - EXPNO[00]
+2016-04-19 13:17:40,802 [DEBUG] [nohup ] - 1-2.1. 출고확정 송신 SEND_LOG 시작
+2016-04-19 13:17:43,172 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-19 13:17:43,172 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-19 13:17:43,181 [DEBUG] [nohup ] - 0013
+2016-04-19 13:17:43,182 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-19 13:17:43,182 [DEBUG] [nohup ] - getCall_dt20160419
+2016-04-19 13:17:43,183 [DEBUG] [nohup ] - getCall_seq0013
+2016-04-19 13:17:43,183 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-19 13:17:43,183 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-19 13:17:43,183 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-19 13:17:43,184 [DEBUG] [nohup ] - getShip_id1572
+2016-04-19 13:17:43,184 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-19 13:17:43,184 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-19 13:17:43,184 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-19 13:17:43,185 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-19 13:17:43,185 [DEBUG] [nohup ] - getResult_code000
+2016-04-19 13:17:43,185 [DEBUG] [nohup ] - getResult_nameSUCCESS!
+2016-04-19 13:17:43,186 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-19 13:17:43,186 [DEBUG] [nohup ] - getCancel_code00
+2016-04-19 13:17:43,186 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160419, 0013, DeliveryInsert, 배송정보등록, SDRY, 1572, N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+
+2016-04-19 13:18:04,129 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-19 13:18:07,574 [DEBUG] [nohup ] - 1-2.1. 출고확정 송신 SEND_LOG 끝
+2016-04-19 13:18:08,162 [DEBUG] [nohup ] - 1-2. 출고확정 송신데이터 DETAIL 파싱 끝
+2016-04-19 13:18:11,416 [DEBUG] [nohup ] - [출고확정SEND_KEY]95:SDRY:order:update:C2M
+2016-04-19 13:18:12,057 [DEBUG] [nohup ] - 1-3. 출고확정 송신 REDIS 시작
+2016-04-19 13:18:13,389 [DEBUG] [nohup ] - 1-3. 출고확정 송신 REDIS 끝
+2016-04-19 13:18:15,075 [DEBUG] [nohup ] - 1-1. 출고확정 송신데이터 HEARD 파싱 끝
+2016-04-19 13:18:21,426 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 끝
+2016-04-19 13:18:27,671 [DEBUG] [nohup ] - DB Connect out : iseccube Driver

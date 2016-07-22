@@ -633,7 +633,7 @@ public class ServiceQuery {
 		qry.append("              ?, ?, ?, ?, ?, ?,                                              	"); 
 		qry.append("              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'),  ?, '"+transcd+"',	");
 		qry.append("              ?, ?, ?, ?, ?, ?,                                              	");
-		qry.append("              ?, ?, ?, ?, ?, ?||LPAD(?, 3, '0')  	     			            ");
+		qry.append("              ?, ?, ?, ?, ?, ?					  	     			            ");
 		qry.append("             )                                                               	"); 
 		
 		return qry.toString();
@@ -724,7 +724,7 @@ public class ServiceQuery {
 		qry.append("SELECT  A.COCD  					  AS  COCD				                                                                "); 
 		qry.append("	  , B.REFCD                       AS  VENDOR_ID                                                                    		"); 
 		qry.append("	  , A.PONO                        AS  PONO                                               								"); 
-		qry.append("	  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			"); 
+//		qry.append("	  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			"); 
 		qry.append("  FROM TBD03C A                                                                                                             "); 
 		qry.append("	 , TBB150 B                                                                                                             "); 
 		qry.append(" WHERE A.VDCD  = B.CD1                                                                                                      "); 
@@ -746,7 +746,7 @@ public class ServiceQuery {
 		qry.append("					   AND C.RESULT_CODE = '000'                                                                            "); 
 		qry.append("					   AND C.CALL_API    = 'DeliveryInsert'                                                                 "); 
 		qry.append("				  )                                                                                                         "); 
-		qry.append("   GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                       ");
+		qry.append("   GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                        ");
 		
 		return qry.toString();
 	}
@@ -755,16 +755,19 @@ public class ServiceQuery {
 	private String deliveryDetailInsert(String cocd, String vdcd, String poNo) {
 		StringBuffer qry = new StringBuffer();
 		
-		qry.append("SELECT  A.WHCD  					  AS  WHCD				                                                                "); 
-		qry.append("	  , A.POSEQ 					  AS  ORDER_SEQ                                                                        	"); 
-		qry.append("	  , A.ORDERLINEKEY                AS  ORDERLINEKEY                                                          			"); 
-		qry.append("	  , A.ORDERRELEASEKEY        	  AS  ORDERRELEASEKEY																	"); 
-		qry.append("	  , A.RENO                        AS  RENO                                                                     			");   
-		qry.append("	  , SUBSTR(A.UPDTIME, 9, 6)       AS  UPDTIME                                                                  			");	
+		qry.append("SELECT  A.POSEQ  					  AS  ORDER_SEQ			                                                                "); 
+//		qry.append("	  , A.POSEQ 					  AS  ORDER_SEQ                                                                        	"); 
+//		qry.append("	  , A.ORDERLINEKEY                AS  ORDERLINEKEY                                                          			"); 
+//		qry.append("	  , A.ORDERRELEASEKEY        	  AS  ORDERRELEASEKEY																	"); 
+//		qry.append("	  , A.RENO                        AS  RENO                                                                     			");   
+//		qry.append("	  , SUBSTR(A.UPDTIME, 9, 6)       AS  UPDTIME                                                                  			");
+		qry.append("	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)   AS  ORDERLINEKEY                                                  		");
 		qry.append("	  , A.EXPNO                       AS  EXPNO                                                              				");
 		qry.append("	  , A.EXPNM 					  AS  EXPNM                                                              				"); 
 		qry.append("	  , A.OUTDT                       AS  OUTDT                                                                  			");
-		qry.append("	  , SUBSTR(UPDTIME, 9, 6)         AS  OUTTIME                                                                  			");		
+		qry.append("	  , SUBSTR(A.UPDTIME, 9, 6)       AS  OUTTIME                                                                  			");		
+		qry.append("	  , A.QTY    				      AS  QTY     	                                                             			");		
+		qry.append("	  , A.BARCODE      				  AS  BARCODE                                                                  			");		
 		qry.append("  FROM TBD03C A                                                                                                             ");  
 		qry.append(" WHERE A.PONO  = '"+poNo+"'                                                                                                 "); 
 		qry.append(" AND   A.COCD  = '"+cocd+"'                                                                                                 "); 
@@ -788,7 +791,7 @@ public class ServiceQuery {
 			qry.append("SELECT  A.COCD  					  AS  COCD				                                                                "); 
 			qry.append("	  , B.REFCD                       AS  VENDOR_ID                                                                    		"); 
 			qry.append("	  , A.PONO                        AS  PONO                                               								"); 
-			qry.append("	  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			"); 
+//			qry.append("	  , A.ORDERHEADERKEY              AS  ORDERHEADERKEY                                                          			"); 
 			qry.append("  FROM TBD03C A                                                                                                             "); 
 			qry.append("	 , TBB150 B                                                                                                             "); 
 			qry.append(" WHERE A.VDCD  = B.CD1                                                                                                      "); 
@@ -819,16 +822,18 @@ public class ServiceQuery {
 		private String orConfirmDetailInsert(String cocd, String vdcd, String poNo) {
 			StringBuffer qry = new StringBuffer();
 			
-			qry.append("SELECT  A.WHCD  					  AS  WHCD				                                                                "); 
-			qry.append("	  , A.POSEQ 					  AS  ORDER_SEQ                                                                        	"); 
-			qry.append("	  , A.ORDERLINEKEY                AS  ORDERLINEKEY                                                          			"); 
-			qry.append("	  , A.ORDERRELEASEKEY        	  AS  ORDERRELEASEKEY																	"); 
-			qry.append("	  , A.RENO                        AS  RENO                                                                     			");   
-			qry.append("	  , SUBSTR(A.UPDTIME, 9, 6)       AS  UPDTIME                                                                  			");	
+			qry.append("SELECT  A.POSEQ 					  AS  ORDER_SEQ                                                                        	"); 
+			qry.append("	  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)         AS  ORDERLINEKEY                                                          			"); 
+//			qry.append("	  , A.ORDERLINEKEY                AS  ORDERLINEKEY                                                          			"); 
+//			qry.append("	  , A.ORDERRELEASEKEY        	  AS  ORDERRELEASEKEY																	"); 
+//			qry.append("	  , A.RENO                        AS  RENO                                                                     			");   
+//			qry.append("	  , SUBSTR(A.UPDTIME, 9, 6)       AS  UPDTIME                                                                  			");	
 			qry.append("	  , A.EXPNO                       AS  EXPNO                                                              				");
 			qry.append("	  , A.EXPNM 					  AS  EXPNM                                                              				"); 
 			qry.append("	  , A.OUTDT                       AS  OUTDT                                                                  			");
 			qry.append("	  , SUBSTR(UPDTIME, 9, 6)         AS  OUTTIME                                                                  			");		
+			qry.append("	  , A.QTY	                      AS  QTY 	                                                             				");
+			qry.append("	  , A.BARCODE                     AS  BARCODE                                                              				");
 			qry.append("  FROM TBD03C A                                                                                                             ");  
 			qry.append(" WHERE A.PONO  = '"+poNo+"'                                                                                                 "); 
 			qry.append(" AND   A.COCD  = '"+cocd+"'                                                                                                 "); 

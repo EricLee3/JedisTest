@@ -1,0 +1,24 @@
+2016-07-22 13:32:06,147 [DEBUG] [nohup ] - com.service.CubeService.getSendProductData()
+2016-07-22 13:32:19,382 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-07-22 13:32:26,312 [DEBUG] [nohup ] - 0. Magento 상품정보 전송을 위한 SQL 작성 시작
+2016-07-22 13:32:56,818 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:32:57,353 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:32:57,971 [DEBUG] [nohup ] - [REFCD[004444]
+2016-07-22 13:33:20,752 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:33:21,234 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:33:21,744 [DEBUG] [nohup ] - [REFCD[003333]
+2016-07-22 13:33:32,647 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:33:33,264 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:33:33,780 [DEBUG] [nohup ] - [REFCD[001111]
+2016-07-22 13:55:35,624 [DEBUG] [nohup ] - com.service.CubeService.getSendProductData()
+2016-07-22 13:55:36,168 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-07-22 13:55:36,169 [DEBUG] [nohup ] - 0. Magento 상품정보 전송을 위한 SQL 작성 시작
+2016-07-22 13:55:36,274 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:55:36,274 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:55:36,274 [DEBUG] [nohup ] - [REFCD[004444]
+2016-07-22 13:55:36,296 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:55:36,297 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:55:36,297 [DEBUG] [nohup ] - [REFCD[003333]
+2016-07-22 13:55:36,300 [DEBUG] [nohup ] - [COCD[95]
+2016-07-22 13:55:36,300 [DEBUG] [nohup ] - [VDCD[FAVIN]
+2016-07-22 13:55:36,300 [DEBUG] [nohup ] - [REFCD[001111]

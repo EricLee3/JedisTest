@@ -1,0 +1,95 @@
+2016-04-20 09:28:09,554 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:28:09,763 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:28:18,243 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:28:18,298 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:28:18,422 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:28:18,429 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:28:18,429 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:28:18,429 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:28:18,429 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:28:18,441 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()SQL EXCEPTION 발생 
+2016-04-20 09:28:18,444 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:28:59,080 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:28:59,548 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:29:02,129 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:29:02,187 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:29:02,201 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:29:03,009 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:29:32,044 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:29:32,044 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:29:32,044 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:29:32,051 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()SQL EXCEPTION 발생 
+2016-04-20 09:29:32,053 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:29:49,633 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:29:49,715 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:29:49,715 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:29:49,776 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:29:49,793 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:29:49,797 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:29:54,406 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:29:54,407 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:29:54,407 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:29:54,415 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()SQL EXCEPTION 발생 
+2016-04-20 09:29:54,418 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:30:03,468 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:30:03,515 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:30:03,515 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:30:03,562 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:30:03,573 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:30:03,575 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:30:09,288 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:30:09,774 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:30:10,308 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:30:56,133 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()SQL EXCEPTION 발생 
+2016-04-20 09:30:56,136 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:33:52,088 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:33:52,144 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:33:52,144 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:33:52,190 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:33:52,202 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:33:52,205 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:33:59,111 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:33:59,112 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:33:59,112 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:36:30,228 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:36:44,973 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-20 09:36:45,625 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:36:45,632 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-20 09:36:45,690 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:36:45,833 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:36:45,838 [DEBUG] [nohup ] - vendorList[3]
+2016-04-20 09:36:48,831 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:36:48,831 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-20 09:36:48,831 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-20 09:36:51,840 [DEBUG] [nohup ] - org_code[45]
+2016-04-20 09:36:51,840 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-20 09:36:51,840 [DEBUG] [nohup ] - redis key [45:REDM:order:update:C2M]
+2016-04-20 09:36:54,118 [DEBUG] [nohup ] - org_code[95]
+2016-04-20 09:36:54,118 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-20 09:36:54,119 [DEBUG] [nohup ] - redis key [95:SDRY:order:update:C2M]
+2016-04-20 09:36:54,743 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-20 09:36:54,762 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-20 09:36:54,839 [DEBUG] [nohup ] - 0001
+2016-04-20 09:36:54,840 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-20 09:36:54,840 [DEBUG] [nohup ] - getCall_dt20160420
+2016-04-20 09:36:54,840 [DEBUG] [nohup ] - getCall_seq0001
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getCall_apiSoldOutCancel
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getCall_api_name품절취소
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getShip_id1573
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getResult_code000
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getResult_nameSUCCESS
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] - getCancel_code00
+2016-04-20 09:36:54,841 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160420, 0001, SoldOutCancel, 품절취소, SDRY, 1573, N/A, N/A, N/A, N/A, 000, SUCCESS, SCAPI, 00]
+
+2016-04-20 09:36:56,287 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-20 09:36:56,291 [DEBUG] [nohup ] - redis data: {"org_code":"95","sell_code":"SDRY","orderDt":"20160420","orderId":"100001470","tranDt":"20160420","status":"3909","list":[{"orderLineNo":"1","orderLineKey":"1573","itemId":"S0H12PT010BL31","qty":"1","statusMsg":"품절"}]}
+2016-04-20 09:36:56,292 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-20 09:36:56,348 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-20 09:36:56,348 [DEBUG] [nohup ] - DB Connect out : iseccube Driver

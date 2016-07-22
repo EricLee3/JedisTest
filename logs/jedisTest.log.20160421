@@ -1,0 +1,1603 @@
+2016-04-21 10:17:24,098 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-21 10:17:34,175 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:17:36,178 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:17:36,234 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:17:36,701 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:17:37,853 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 10:17:41,005 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-21 10:17:45,145 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-21 10:17:50,958 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-21 10:17:54,412 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-21 10:17:54,412 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-21 10:17:56,627 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:17:56,628 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:17:56,965 [DEBUG] [nohup ] - 0001
+2016-04-21 10:17:56,968 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:17:56,968 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:17:56,968 [DEBUG] [nohup ] - getCall_seq0001
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:17:56,969 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0001, DeliveryInsert, 배송정보등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:18:00,478 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:18:02,232 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-21 10:18:02,266 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-21 10:18:02,266 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-21 10:18:02,323 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:18:02,323 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - 0002
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getCall_seq0002
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:18:02,330 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:18:02,331 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:18:02,331 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:18:02,331 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:18:02,331 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0002, DeliveryInsert, 배송정보등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:18:03,829 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:18:08,408 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '1'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'DeliveryInsert'                                                                 				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO 				                                                                         Parameters: []
+
+2016-04-21 10:18:09,975 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 시작
+2016-04-21 10:18:10,546 [DEBUG] [nohup ] - 출고확정 송신건수[0]
+2016-04-21 10:18:24,544 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:18:24,545 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:18:24,564 [DEBUG] [nohup ] - 0003
+2016-04-21 10:18:24,565 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:18:24,565 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:18:24,565 [DEBUG] [nohup ] - getCall_seq0003
+2016-04-21 10:18:24,566 [DEBUG] [nohup ] - getCall_apiDeliveryInsert
+2016-04-21 10:18:24,566 [DEBUG] [nohup ] - getCall_api_name배송정보등록
+2016-04-21 10:18:24,566 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-21 10:18:24,566 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:18:24,567 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:18:24,567 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:18:24,567 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:18:24,567 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:18:24,568 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:18:24,568 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:18:24,568 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:18:24,569 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:18:24,569 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0003, DeliveryInsert, 배송정보등록, SDRY, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:18:38,233 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:18:44,978 [DEBUG] [nohup ] - 1. 출고확정 송신 처리 끝
+2016-04-21 10:18:46,931 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:19:49,910 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-21 10:20:03,018 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:20:03,018 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:20:03,061 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:20:03,072 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:20:03,075 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 10:20:03,075 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-21 10:20:03,080 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-21 10:20:22,587 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:20:23,193 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:20:23,193 [DEBUG] [nohup ] - 반품확정 송신건수[0]
+2016-04-21 10:20:24,717 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:20:24,717 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:20:24,725 [DEBUG] [nohup ] - 0004
+2016-04-21 10:20:24,726 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:20:24,726 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getCall_seq0004
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:20:24,727 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0004, ReturnPickUpInsert, 반품수거등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:20:26,419 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:20:28,910 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:20:28,939 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:20:28,939 [DEBUG] [nohup ] - 반품확정 송신건수[0]
+2016-04-21 10:20:28,995 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:20:28,995 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - 0005
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getCall_seq0005
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:20:29,001 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:20:29,002 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:20:29,002 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:20:29,002 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0005, ReturnPickUpInsert, 반품수거등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:20:31,058 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:20:40,763 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:20:51,115 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:20:51,645 [DEBUG] [nohup ] - 반품확정 송신건수[1]
+2016-04-21 10:21:08,888 [DEBUG] [nohup ] - 1-1. 반품확정 송신데이터 HEARD 파싱 시작
+2016-04-21 10:21:15,947 [DEBUG] [nohup ] - COCD[95]
+2016-04-21 10:21:16,404 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-21 10:21:16,935 [DEBUG] [nohup ] - PONO[100001521]
+2016-04-21 10:31:18,717 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ 					  AS  ORDER_SEQ                                                                        		  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)         AS  ORDERLINEKEY                                                          				  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(UPDTIME, 9, 6)         AS  OUTTIME                                                                  				  , A.QTY	                      AS  QTY 	                                                             					  , A.BARCODE                     AS  BARCODE                                                              				  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001521'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                       					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                          Parameters: []
+
+2016-04-21 10:36:56,362 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-21 10:36:57,064 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:36:57,086 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:36:57,148 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:36:57,272 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:36:57,277 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 10:36:57,277 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-21 10:36:57,306 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-21 10:37:03,898 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:37:05,233 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:37:05,233 [DEBUG] [nohup ] - 반품확정 송신건수[0]
+2016-04-21 10:37:10,308 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:37:10,309 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:37:10,319 [DEBUG] [nohup ] - 0006
+2016-04-21 10:37:10,321 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:37:10,322 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:37:10,322 [DEBUG] [nohup ] - getCall_seq0006
+2016-04-21 10:37:10,323 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:37:10,323 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:37:10,324 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:37:10,325 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:37:10,325 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0006, ReturnPickUpInsert, 반품수거등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:37:13,532 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:37:43,859 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-21 10:37:48,121 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:37:48,121 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:37:48,123 [ERROR] [nohup ] - java.sql.SQLException: No suitable driver found for jdbc:oracle:thin:@220.117.243.24:1521:CBUTF8
+	at java.sql.DriverManager.getConnection(DriverManager.java:689)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at com.service.command.connection.DataBaseManager.getConnection(DataBaseManager.java:94)
+	at com.service.CubeAPItoMg.GetVendorList(CubeAPItoMg.java:135)
+	at com.service.CubeAPItoMg.api_Auto_ReturnConfirm(CubeAPItoMg.java:2516)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:159)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 10:37:48,123 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.GetVendorList() Error :java.lang.NullPointerException
+2016-04-21 10:37:48,124 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:37:48,124 [ERROR] [nohup ] - java.lang.NullPointerException
+	at com.service.command.connection.DataBaseManager.close(DataBaseManager.java:132)
+	at com.service.CubeAPItoMg.GetVendorList(CubeAPItoMg.java:186)
+	at com.service.CubeAPItoMg.api_Auto_ReturnConfirm(CubeAPItoMg.java:2516)
+	at org.apache.jsp.SterlingApiCall_jsp._jspService(SterlingApiCall_jsp.java:159)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 10:37:48,124 [DEBUG] [nohup ] - vendorList[0]
+2016-04-21 10:37:48,124 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-21 10:37:48,130 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-21 10:37:48,130 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 끝
+2016-04-21 10:37:48,130 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:38:03,877 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Delivery_Send()
+2016-04-21 10:38:04,039 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:38:04,059 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:38:04,100 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:38:04,208 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:38:04,211 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 10:38:04,211 [DEBUG] [nohup ] - 0. Redis connection 생성 시작
+2016-04-21 10:38:04,235 [DEBUG] [nohup ] - 0. Redis connection 생성 끝
+2016-04-21 10:38:06,288 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'ASPB'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:38:06,348 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:38:06,348 [DEBUG] [nohup ] - 반품확정 송신건수[0]
+2016-04-21 10:38:06,394 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:38:06,395 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:38:06,403 [DEBUG] [nohup ] - 0007
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getCall_seq0007
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getVendor_idASPB
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:38:06,405 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:38:06,406 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0007, ReturnPickUpInsert, 반품수거등록, ASPB, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:38:07,988 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:38:10,094 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'REDM'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '45'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:38:10,124 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:38:10,125 [DEBUG] [nohup ] - 반품확정 송신건수[0]
+2016-04-21 10:38:10,588 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:38:10,588 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - 0008
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getCall_seq0008
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getVendor_idREDM
+2016-04-21 10:38:10,593 [DEBUG] [nohup ] - getShip_idN/A
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getResult_code100
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getResult_name연동할 대상 정보가 없습니다.
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:38:10,594 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0008, ReturnPickUpInsert, 반품수거등록, REDM, N/A, N/A, N/A, N/A, N/A, 100, 연동할 대상 정보가 없습니다., SCAPI, 00]
+
+2016-04-21 10:38:11,856 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:38:16,307 [DEBUG] [nohup ] -  Query: SELECT  A.COCD  					  AS  COCD				                                                                	  , B.REFCD                       AS  VENDOR_ID                                                                    			  , A.PONO                        AS  PONO                                               								  FROM TBD03C A                                                                                                             	 , TBB150 B                                                                                                              WHERE A.VDCD  = B.CD1                                                                                                         AND A.CD22  = B.REFCD                                                                                                       AND B.REFTP = 'ZY'                                                                                                          AND B.CD4   = '40'                                                                                               AND B.REFCD   = 'SDRY'                                                                                            	   AND A.CBGU  = '2'                                                                                                           AND A.GUBUN = '1'                                                                                                           AND A.COCD   = '95'                                                                                            	   AND A.OUTDT BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')                                        AND A.PODT >= '20141028'                                                     											   AND A.POSEQ < 90001                                                                                                         AND NOT EXISTS ( SELECT 1                                                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE B.REFCD       = C.VENDOR_ID                                                                      					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                           								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                            GROUP BY A.COCD, B.REFCD, A.PONO, A.ORDERHEADERKEY                                                                        Parameters: []
+
+2016-04-21 10:38:16,870 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 시작
+2016-04-21 10:38:17,364 [DEBUG] [nohup ] - 반품확정 송신건수[1]
+2016-04-21 10:38:18,918 [DEBUG] [nohup ] - 1-1. 반품확정 송신데이터 HEARD 파싱 시작
+2016-04-21 10:38:23,222 [DEBUG] [nohup ] - COCD[95]
+2016-04-21 10:38:23,772 [DEBUG] [nohup ] - VENDOR_ID[SDRY]
+2016-04-21 10:38:24,327 [DEBUG] [nohup ] - PONO[100001521]
+2016-04-21 10:38:38,757 [DEBUG] [nohup ] -  Query: SELECT  A.POSEQ 					  AS  ORDER_SEQ                                                                        		  , SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3)         AS  ORDERLINEKEY                                                          				  , A.EXPNO                       AS  EXPNO                                                              					  , A.EXPNM 					  AS  EXPNM                                                              					  , A.OUTDT                       AS  OUTDT                                                                  				  , SUBSTR(UPDTIME, 9, 6)         AS  OUTTIME                                                                  				  , A.QTY	                      AS  QTY 	                                                             					  , A.BARCODE                     AS  BARCODE                                                              				  FROM TBD03C A                                                                                                              WHERE A.PONO  = '100001521'                                                                                                  AND   A.COCD  = '95'                                                                                                  AND   A.CD22  = 'SDRY'                                                                                                  AND   A.POYN  = 'Y'                                                                                                 		 AND NOT EXISTS ( SELECT 1                             		                                                                					  FROM API_SEND_LOG C                                                                                   					 WHERE A.CD22       = C.VENDOR_ID                                                                       					   AND SUBSTR(A.TEMPNO, 1, LENGTH(A.TEMPNO) -3) = C.SHIP_ID                                             					   AND C.CALL_DT >= TO_CHAR(SYSDATE -10, 'YYYYMMDD')                                          								   AND C.RESULT_CODE = '000'                                                                            					   AND C.CALL_API    = 'ReturnPickUpInsert'                                                             				  )                                                                                                          Parameters: []
+
+2016-04-21 10:38:40,475 [DEBUG] [nohup ] - 1-2. 반품확정 송신데이터 DETAIL 파싱 시작
+2016-04-21 10:38:48,057 [DEBUG] [nohup ] - ORDER_SEQ[1]
+2016-04-21 10:38:49,134 [DEBUG] [nohup ] - ORDERLINEKEY[1601]
+2016-04-21 10:38:49,687 [DEBUG] [nohup ] - OUTDT[20160421]
+2016-04-21 10:38:50,235 [DEBUG] [nohup ] - EXPNM[]
+2016-04-21 10:38:50,848 [DEBUG] [nohup ] - EXPNO[]
+2016-04-21 10:40:52,550 [DEBUG] [nohup ] - 1-2.1. 반품확정 송신 SEND_LOG 시작
+2016-04-21 10:40:55,148 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:40:55,148 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:40:55,157 [DEBUG] [nohup ] - 0009
+2016-04-21 10:40:55,158 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:40:55,158 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:40:55,158 [DEBUG] [nohup ] - getCall_seq0009
+2016-04-21 10:40:55,158 [DEBUG] [nohup ] - getCall_apiReturnPickUpInsert
+2016-04-21 10:40:55,158 [DEBUG] [nohup ] - getCall_api_name반품수거등록
+2016-04-21 10:40:55,159 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-21 10:40:55,159 [DEBUG] [nohup ] - getShip_id1601
+2016-04-21 10:40:55,159 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:40:55,159 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:40:55,160 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:40:55,160 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:40:55,160 [DEBUG] [nohup ] - getResult_code000
+2016-04-21 10:40:55,160 [DEBUG] [nohup ] - getResult_nameSUCCESS!
+2016-04-21 10:40:55,160 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:40:55,161 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:40:55,161 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0009, ReturnPickUpInsert, 반품수거등록, SDRY, 1601, N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+
+2016-04-21 10:41:08,204 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:41:13,361 [DEBUG] [nohup ] - 1-2.1. 반품확정 송신 SEND_LOG 끝
+2016-04-21 10:41:13,934 [DEBUG] [nohup ] - 1-2. 반품확정 송신데이터 DETAIL 파싱 끝
+2016-04-21 10:41:16,330 [DEBUG] [nohup ] - [반품확정SEND_KEY]95:SDRY:return:update:C2M
+2016-04-21 10:41:17,294 [DEBUG] [nohup ] - 1-3. 반품확정 송신 REDIS 시작
+2016-04-21 10:41:18,123 [DEBUG] [nohup ] - JsonString : {"org_code":"95","sell_code":"SDRY","orderId":"100001521","tranDt":"20160421","status":"9700","list":[{"orderLineNo":"1","orderLineKey":"1601","expnm":"","expNo":"","outDt":"20160421","outTime":"095959","qty":"","itemId":""}]}
+2016-04-21 10:41:24,710 [DEBUG] [nohup ] - 1-3. 반품확정 송신 REDIS 끝
+2016-04-21 10:41:26,650 [DEBUG] [nohup ] - 1-1. 반품확정 송신데이터 HEARD 파싱 끝
+2016-04-21 10:41:32,501 [DEBUG] [nohup ] - 1. 반품확정 송신 처리 끝
+2016-04-21 10:41:39,551 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:45:06,858 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_SoldOutRefuse_Cancel()
+2016-04-21 10:45:07,808 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:45:07,815 [DEBUG] [nohup ] - com.service.CubeAPItoMg.GetVendorList()
+2016-04-21 10:45:08,073 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:45:08,180 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:45:08,184 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 10:45:28,860 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 10:45:29,274 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 10:45:29,779 [DEBUG] [nohup ] - redis key [95:ASPB:order:update:C2M]
+2016-04-21 10:46:14,152 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 10:46:14,152 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 10:46:14,153 [DEBUG] [nohup ] - redis key [45:REDM:order:update:C2M]
+2016-04-21 10:46:19,128 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 10:46:19,569 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 10:46:20,085 [DEBUG] [nohup ] - redis key [95:SDRY:order:update:C2M]
+2016-04-21 10:47:11,502 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 10:47:11,539 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 10:47:11,559 [DEBUG] [nohup ] - 0010
+2016-04-21 10:47:11,563 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 10:47:11,564 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 10:47:11,564 [DEBUG] [nohup ] - getCall_seq0010
+2016-04-21 10:47:11,564 [DEBUG] [nohup ] - getCall_apiReturnRefuse
+2016-04-21 10:47:11,564 [DEBUG] [nohup ] - getCall_api_name반품거부
+2016-04-21 10:47:11,565 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-21 10:47:11,565 [DEBUG] [nohup ] - getShip_id1599
+2016-04-21 10:47:11,565 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 10:47:11,565 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 10:47:11,565 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 10:47:11,566 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 10:47:11,566 [DEBUG] [nohup ] - getResult_code000
+2016-04-21 10:47:11,566 [DEBUG] [nohup ] - getResult_nameSUCCESS
+2016-04-21 10:47:11,566 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 10:47:11,566 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 10:47:11,567 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0010, ReturnRefuse, 반품거부, SDRY, 1599, N/A, N/A, N/A, N/A, 000, SUCCESS, SCAPI, 00]
+
+2016-04-21 10:47:23,664 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 10:47:30,985 [DEBUG] [nohup ] - redis data: {"org_code":"95","sell_code":"SDRY","orderDt":"20160421","orderId":"100001520","tranDt":"20160421","status":"9909","list":[{"orderLineNo":"1","orderLineKey":"1599","itemId":"S0H12PT010BL31","qty":"-1","statusMsg":"기타"}]}
+2016-04-21 10:47:36,088 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 10:47:47,314 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 10:47:55,007 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:42:05,813 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 15:42:05,992 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:42:06,128 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 15:42:06,188 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:42:06,291 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:42:06,295 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 15:42:06,295 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 15:42:06,323 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 15:42:06,326 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:42:06,326 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 15:42:06,326 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 15:42:06,326 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:42:06,326 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:42:06,384 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:42:06,396 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:42:06,488 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0001, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:42:15,709 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:42:15,713 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:42:15,717 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 15:42:15,717 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 15:42:15,717 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 15:42:15,717 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:42:15,717 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:42:15,774 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:42:15,775 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:42:15,781 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0002, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:42:29,603 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:42:29,606 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:42:29,609 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:42:29,609 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 15:42:29,609 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 15:42:29,609 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 15:42:29,609 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:42:29,612 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - status[3200]
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 15:42:29,686 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 15:42:40,296 [DEBUG] [nohup ] - ###Error###:com.service.ScApiCreateREDIS.api_Auto_PO() Error :java.lang.NullPointerException
+2016-04-21 15:42:43,152 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:43:05,228 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 15:43:25,425 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:43:25,427 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 15:43:25,474 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:43:25,486 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:43:25,490 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 15:43:25,490 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 15:43:25,495 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 15:43:33,949 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:43:34,761 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 15:43:35,291 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 15:43:35,808 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:43:37,374 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:43:39,695 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:43:39,696 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:43:39,702 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0003, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:43:41,910 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:43:41,913 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:43:45,059 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 15:43:45,059 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 15:43:45,060 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 15:43:45,060 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:43:45,060 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:43:45,109 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:43:45,109 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:43:45,116 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0004, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:43:47,715 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:43:47,717 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:43:52,461 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:43:52,690 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 15:43:53,162 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 15:43:53,371 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:43:54,388 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:44:06,488 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:44:06,488 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:44:06,496 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0005, OrderProcess, 발주요청, SDRY, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:44:11,196 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:44:11,200 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:44:11,201 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:45:17,874 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 15:45:19,028 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:45:19,028 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 15:45:19,673 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:45:19,687 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:45:19,691 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 15:45:19,691 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 15:45:19,695 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 15:45:22,157 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:45:22,157 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 15:45:22,157 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 15:45:22,157 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:45:22,157 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:45:23,216 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:45:23,217 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:45:23,223 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0006, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:45:25,045 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:45:25,049 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:45:27,334 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 15:45:27,336 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 15:45:27,337 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 15:45:27,337 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:45:27,337 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:45:27,863 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:45:27,863 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:45:27,870 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0007, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:45:28,969 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:45:28,972 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:45:33,295 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:45:33,774 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 15:45:34,243 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 15:45:34,702 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 15:45:35,272 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:45:44,701 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - status[3200]
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 15:45:44,703 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 15:47:02,942 [DEBUG] [nohup ] - ###Error###:com.service.ScApiCreateREDIS.api_Auto_PO() Error :java.lang.NullPointerException
+2016-04-21 15:47:02,944 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:47:51,791 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 15:47:51,863 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:47:51,863 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 15:47:51,908 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:47:51,920 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:47:51,923 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 15:47:51,923 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 15:47:51,929 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 15:47:56,755 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:47:56,755 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 15:47:56,755 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 15:47:56,755 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:47:56,755 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:47:56,806 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:47:56,806 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:47:56,811 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0008, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:47:58,457 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:47:58,460 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:48:00,563 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 15:48:00,565 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 15:48:00,566 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 15:48:00,566 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 15:48:00,566 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:48:00,625 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 15:48:00,625 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 15:48:00,631 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0009, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 15:48:02,715 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 15:48:02,718 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 15:48:04,319 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 15:48:04,319 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 15:48:04,319 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 15:48:04,319 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 15:48:04,319 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 15:48:04,322 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - status[3200]
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 15:48:04,324 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 15:54:11,117 [DEBUG] [nohup ] - ###Error###:com.service.ScApiCreateREDIS.api_Auto_PO() Error :java.lang.NullPointerException
+2016-04-21 15:54:11,120 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:17,401 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:28:17,997 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:18,113 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 17:28:18,166 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:18,208 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:18,220 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 17:28:18,220 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:28:18,266 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:28:22,741 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:28:23,214 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:23,214 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 17:28:23,333 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:23,346 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:23,349 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 17:28:23,349 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:28:23,355 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:28:24,604 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:28:24,604 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 17:28:24,604 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 17:28:24,605 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:28:24,605 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:24,671 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:24,681 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:28:24,719 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0010, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:28:26,519 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:28:26,520 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 17:28:26,520 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 17:28:26,520 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:28:26,520 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:26,586 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:26,586 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:28:26,595 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0010, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:28:28,442 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:28,444 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:28:31,728 [ERROR] [nohup ] - java.sql.SQLException: ORA-00001: 무결성 제약 조건(ISECCUBE.SYS_C006904)에 위배됩니다
+ Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0010, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setRecvLog(ServiceDAO.java:213)
+	at com.service.CubeService.setRecvLog(CubeService.java:1202)
+	at com.service.ScApiCreateREDIS.api_Auto_PO(ScApiCreateREDIS.java:1717)
+	at org.apache.jsp.scApiManager_jsp._jspService(scApiManager_jsp.java:142)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 17:28:31,732 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:31,735 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:28:33,855 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 17:28:33,856 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 17:28:33,856 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 17:28:33,856 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:28:33,856 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:34,339 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:34,339 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:28:34,346 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0011, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:28:36,817 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 17:28:36,818 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 17:28:36,818 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 17:28:36,818 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:28:36,818 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:36,890 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:36,891 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:28:36,898 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0011, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:28:38,536 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:38,540 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:28:40,849 [ERROR] [nohup ] - java.sql.SQLException: ORA-00001: 무결성 제약 조건(ISECCUBE.SYS_C006904)에 위배됩니다
+ Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0011, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setRecvLog(ServiceDAO.java:213)
+	at com.service.CubeService.setRecvLog(CubeService.java:1202)
+	at com.service.ScApiCreateREDIS.api_Auto_PO(ScApiCreateREDIS.java:1717)
+	at org.apache.jsp.scApiManager_jsp._jspService(scApiManager_jsp.java:142)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 17:28:40,852 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:28:40,855 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:28:46,815 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:28:46,815 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:28:46,816 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 17:28:46,816 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 17:28:46,816 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:46,819 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - status[3200]
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:28:46,955 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 17:28:49,895 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:28:49,895 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:28:49,895 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 17:28:49,895 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:28:49,895 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:28:49,943 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:28:49,944 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:28:49,949 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0012, OrderProcess, 발주요청, SDRY, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:29:20,823 [DEBUG] [nohup ] - vendor_id[SDRY]
+2016-04-21 17:29:20,823 [DEBUG] [nohup ] - 처리상태[3200]
+2016-04-21 17:29:20,823 [DEBUG] [nohup ] - 처리업무구분[OrderRetrieve]
+2016-04-21 17:29:20,880 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:29:20,880 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:29:20,887 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0012, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+
+2016-04-21 17:29:23,388 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:29:23,391 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:29:23,391 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:29:25,012 [ERROR] [nohup ] - java.sql.SQLException: ORA-00001: 무결성 제약 조건(ISECCUBE.SYS_C006904)에 위배됩니다
+ Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0012, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setRecvLog(ServiceDAO.java:213)
+	at com.service.CubeService.setRecvLog(CubeService.java:1202)
+	at com.service.ScApiCreateREDIS.api_Auto_PO(ScApiCreateREDIS.java:1493)
+	at org.apache.jsp.scApiManager_jsp._jspService(scApiManager_jsp.java:142)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 17:29:25,021 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:29:25,024 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 17:29:25,024 [DEBUG] [nohup ] - call_seq[]
+2016-04-21 17:29:25,024 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 시작
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - orderLineKey[0751]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptNm[]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptTel[010-9890-7118]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptHp[010-9890-7118]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptAddr1[서울특별시 강서구 강서로12길 14-21 (인터시티빌라)]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptAddr2[C-401]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - receiptZipcode[157-880]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - custNm[　 이천재]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - custTel[010-9890-7118]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - custHp[010-9890-7118]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - deliveryMsg[]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - itemNm[Reserve Signature Jar ORCHID]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - qty[1]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - salePrice[1000.0000]
+2016-04-21 17:29:25,025 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 끝
+2016-04-21 17:29:25,026 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 시작
+2016-04-21 17:29:31,905 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, , 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 2016-04-14 07:04:47, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+
+2016-04-21 17:29:33,598 [ERROR] [nohup ] - java.sql.SQLException: ORA-12899: "ISECCUBE"."API_RECV_DATA"."INSTRUCT_DT" 열에 대한 값이 너무 큼(실제: 19, 최대값: 8)
+ Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, , 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 2016-04-14 07:04:47, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setRecvData(ServiceDAO.java:350)
+	at com.service.ScApiCreateREDIS.api_Auto_PO(ScApiCreateREDIS.java:1642)
+	at org.apache.jsp.scApiManager_jsp._jspService(scApiManager_jsp.java:142)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 17:29:33,598 [DEBUG] [nohup ] - result[0]
+2016-04-21 17:29:33,598 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 끝
+2016-04-21 17:29:33,598 [DEBUG] [nohup ] - 2-2. callProcedure 요청 시작
+2016-04-21 17:29:33,598 [DEBUG] [nohup ] - insertErrCnt[1]
+2016-04-21 17:29:33,598 [DEBUG] [nohup ] - API_RECV_DATA INSERT 실패
+2016-04-21 17:29:33,606 [DEBUG] [nohup ] - 2-3. 주문연동처리시 에러처리
+2016-04-21 17:29:33,610 [DEBUG] [nohup ] - 2-2. callProcedure 요청 끝
+2016-04-21 17:29:33,610 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:29:33,610 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:30:43,532 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:30:43,708 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:30:43,813 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 17:30:43,872 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:30:43,901 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:30:43,905 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 17:30:43,905 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:30:43,929 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:30:46,964 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:30:46,965 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 17:30:46,965 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 17:30:46,965 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:30:46,965 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:30:47,029 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:30:47,042 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:30:47,059 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0013, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:30:49,151 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:30:49,155 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:30:51,380 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 17:30:51,380 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 17:30:51,380 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 17:30:51,381 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:30:51,381 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:30:51,434 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:30:51,434 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:30:51,441 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0014, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:30:53,163 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:30:53,166 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:30:55,320 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:30:55,320 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:30:55,320 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 17:30:55,320 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 17:30:55,320 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:30:55,323 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 17:30:55,454 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 17:30:55,454 [DEBUG] [nohup ] - status[3200]
+2016-04-21 17:30:55,454 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 17:30:55,454 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:30:55,454 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:30:55,455 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 17:30:57,945 [DEBUG] [nohup ] - vendor_id[SDRY]
+2016-04-21 17:30:57,945 [DEBUG] [nohup ] - 처리상태[3200]
+2016-04-21 17:30:57,945 [DEBUG] [nohup ] - 처리업무구분[OrderRetrieve]
+2016-04-21 17:30:58,010 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:30:58,010 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:30:58,018 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0015, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+
+2016-04-21 17:31:00,038 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - call_seq[0015]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 시작
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - orderLineKey[0751]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptNm[]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptTel[010-9890-7118]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptHp[010-9890-7118]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptAddr1[서울특별시 강서구 강서로12길 14-21 (인터시티빌라)]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptAddr2[C-401]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - receiptZipcode[157-880]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - custNm[　 이천재]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - custTel[010-9890-7118]
+2016-04-21 17:31:00,042 [DEBUG] [nohup ] - custHp[010-9890-7118]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - deliveryMsg[]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - itemNm[Reserve Signature Jar ORCHID]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - qty[1]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - salePrice[1000.0000]
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 끝
+2016-04-21 17:31:00,043 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 시작
+2016-04-21 17:31:06,424 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, 0015, 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 2016-04-14 07:04:47, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+
+2016-04-21 17:31:17,897 [ERROR] [nohup ] - java.sql.SQLException: ORA-12899: "ISECCUBE"."API_RECV_DATA"."INSTRUCT_DT" 열에 대한 값이 너무 큼(실제: 19, 최대값: 8)
+ Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, 0015, 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 2016-04-14 07:04:47, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+	at org.apache.commons.dbutils.QueryRunner.rethrow(QueryRunner.java:359)
+	at org.apache.commons.dbutils.QueryRunner.update(QueryRunner.java:428)
+	at com.service.command.query.ExecQuery.update(ExecQuery.java:142)
+	at com.service.dao.ServiceDAO.setRecvData(ServiceDAO.java:350)
+	at com.service.ScApiCreateREDIS.api_Auto_PO(ScApiCreateREDIS.java:1642)
+	at org.apache.jsp.scApiManager_jsp._jspService(scApiManager_jsp.java:142)
+	at org.apache.jasper.runtime.HttpJspBase.service(HttpJspBase.java:70)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:439)
+	at org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:395)
+	at org.apache.jasper.servlet.JspServlet.service(JspServlet.java:339)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:731)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:303)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:241)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:208)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:220)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:122)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:505)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:169)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:103)
+	at org.apache.catalina.valves.AccessLogValve.invoke(AccessLogValve.java:956)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:116)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:436)
+	at org.apache.coyote.http11.AbstractHttp11Processor.process(AbstractHttp11Processor.java:1078)
+	at org.apache.coyote.AbstractProtocol$AbstractConnectionHandler.process(AbstractProtocol.java:625)
+	at org.apache.tomcat.util.net.JIoEndpoint$SocketProcessor.run(JIoEndpoint.java:316)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:745)
+
+2016-04-21 17:31:17,898 [DEBUG] [nohup ] - result[0]
+2016-04-21 17:31:17,898 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 끝
+2016-04-21 17:31:17,898 [DEBUG] [nohup ] - 2-2. callProcedure 요청 시작
+2016-04-21 17:31:17,898 [DEBUG] [nohup ] - insertErrCnt[1]
+2016-04-21 17:31:17,898 [DEBUG] [nohup ] - API_RECV_DATA INSERT 실패
+2016-04-21 17:31:17,928 [DEBUG] [nohup ] - 2-3. 주문연동처리시 에러처리
+2016-04-21 17:31:17,932 [DEBUG] [nohup ] - 2-2. callProcedure 요청 끝
+2016-04-21 17:31:17,932 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:31:17,932 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:32:29,209 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:32:29,268 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:32:29,268 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 17:32:29,316 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:32:29,329 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:32:29,332 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 17:32:29,332 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:32:29,338 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:32:30,584 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:32:30,584 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 17:32:30,584 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 17:32:30,584 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:32:30,584 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:32:30,642 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:32:30,642 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:32:30,649 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0016, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:32:31,889 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:32:31,892 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:32:32,933 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 17:32:32,934 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 17:32:32,934 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 17:32:32,934 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:32:32,934 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:32:32,979 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:32:32,979 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:32:32,986 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0017, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:32:34,232 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:32:34,234 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:32:35,358 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:32:35,359 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:32:35,359 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 17:32:35,359 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 17:32:35,359 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:32:35,362 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{"status":"3200","orderId":"100001469","tranDt":"2016-04-14 07:06:44","vendor_id":"SDRY","channelOrderNo":"1231321","orderDt":"2016-04-14 07:04:47","list":[{"custHp":"010-9890-7118","itemId":"AYB5CL50410L","orderDt":"2016-04-14 07:04:47","receiptAddr2":"C-401","receiptAddr1":"서울특별시 강서구 강서로12길 14-21 (인터시티빌라)","deliveryMsg":"","orderLineNo":"158","itemNm":"Reserve Signature Jar ORCHID","sell_code":"SDRY","qty":1,"receiptHp":"010-9890-7118","orderLineKey":"0751","receiptTel":"010-9890-7118","salePrice":"1000.0000","custTel":"010-9890-7118","org_code":"95","custNm":"　 이천재","receiptZipcode":"157-880","orderId":"100001467","receiptNm":""}]}]
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - status[3200]
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - orderId[100001469]
+2016-04-21 17:32:35,363 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 17:32:37,494 [DEBUG] [nohup ] - vendor_id[SDRY]
+2016-04-21 17:32:37,494 [DEBUG] [nohup ] - 처리상태[3200]
+2016-04-21 17:32:37,494 [DEBUG] [nohup ] - 처리업무구분[OrderRetrieve]
+2016-04-21 17:32:37,541 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:32:37,541 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:32:37,547 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0018, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+
+2016-04-21 17:32:42,371 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - call_seq[0018]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 시작
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - orderLineNo[158]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - orderLineKey[0751]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptNm[]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptTel[010-9890-7118]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptHp[010-9890-7118]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptAddr1[서울특별시 강서구 강서로12길 14-21 (인터시티빌라)]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptAddr2[C-401]
+2016-04-21 17:32:42,375 [DEBUG] [nohup ] - receiptZipcode[157-880]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - custNm[　 이천재]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - custTel[010-9890-7118]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - custHp[010-9890-7118]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - deliveryMsg[]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - itemNm[Reserve Signature Jar ORCHID]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - qty[1]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - salePrice[1000.0000]
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 끝
+2016-04-21 17:32:42,376 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 시작
+2016-04-21 17:32:47,204 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, 0018, 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 2016-04-14 07:04:47, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 158, 158, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 1231321]
+
+2016-04-21 17:55:40,310 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:56:31,697 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 17:56:31,878 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:56:31,989 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 17:56:32,040 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:56:32,079 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:56:32,083 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 17:56:32,083 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:56:32,108 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:56:33,820 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:56:33,821 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 17:56:33,821 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 17:56:33,821 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:56:33,821 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:56:33,870 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:56:33,886 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:56:33,954 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0019, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:56:35,538 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:56:35,541 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:56:36,952 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 17:56:36,952 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 17:56:36,952 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 17:56:36,952 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 17:56:36,952 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:56:37,004 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:56:37,004 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:56:37,011 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0020, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 17:56:38,384 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:56:38,388 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:56:40,787 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:56:40,787 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:56:40,788 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 17:56:40,788 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 17:56:40,788 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 17:56:40,791 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 17:56:40,857 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 17:56:40,858 [DEBUG] [nohup ] - status[3200]
+2016-04-21 17:56:40,858 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 17:56:40,858 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:56:40,858 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:56:40,858 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 17:57:14,742 [DEBUG] [nohup ] - vendor_id[SDRY]
+2016-04-21 17:57:14,742 [DEBUG] [nohup ] - 처리상태[3200]
+2016-04-21 17:57:14,743 [DEBUG] [nohup ] - 처리업무구분[OrderRetrieve]
+2016-04-21 17:57:15,198 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:57:15,198 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:57:15,205 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0021, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+
+2016-04-21 17:57:19,366 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - call_seq[0021]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 시작
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - orderLineKey[0751]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - receiptNm[]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - receiptTel[010-9890-7118]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - receiptHp[010-9890-7118]
+2016-04-21 17:57:19,370 [DEBUG] [nohup ] - receiptAddr1[서울특별시 강서구 강서로12길 14-21 (인터시티빌라)]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - receiptAddr2[C-401]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - receiptZipcode[157-880]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - custNm[　 이천재]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - custTel[010-9890-7118]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - custHp[010-9890-7118]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - deliveryMsg[]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - itemNm[Reserve Signature Jar ORCHID]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - qty[1]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - salePrice[1000.0000]
+2016-04-21 17:57:19,371 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 끝
+2016-04-21 17:57:19,372 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 시작
+2016-04-21 17:57:24,258 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, 0021, 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 20160414, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+
+2016-04-21 17:57:28,297 [DEBUG] [nohup ] - result[1]
+2016-04-21 17:57:28,298 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 끝
+2016-04-21 17:57:28,298 [DEBUG] [nohup ] - 2-2. callProcedure 요청 시작
+2016-04-21 17:57:28,298 [DEBUG] [nohup ] - insertErrCnt[0]
+2016-04-21 17:57:28,298 [DEBUG] [nohup ] - API_RECV_DATA INSERT 정상
+2016-04-21 17:57:28,316 [DEBUG] [nohup ] -  프로시져 콜 시작
+2016-04-21 17:57:28,317 [DEBUG] [nohup ] -  callProcedure() CALL 
+2016-04-21 17:57:28,336 [DEBUG] [nohup ] - call_api[OrderRetrieve]
+2016-04-21 17:57:28,804 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:57:28,804 [DEBUG] [nohup ] - 주문 연동 시작
+2016-04-21 17:57:29,402 [DEBUG] [nohup ] - 주문 연동 끝
+2016-04-21 17:57:29,402 [DEBUG] [nohup ] - transcd[40]
+2016-04-21 17:57:29,402 [DEBUG] [nohup ] - 처리결과 전송 CALL
+2016-04-21 17:57:29,403 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO_Send()
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - ----- 출고의뢰결과 조회조건 -----
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - call_seq[0021]
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - command[10]
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - transCD[40]
+2016-04-21 17:57:29,451 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 17:57:29,461 [DEBUG] [nohup ] - ----- 출고의뢰결과 송신 헤더정보 -----
+2016-04-21 17:57:29,461 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 17:57:29,461 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderDt[20160414]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderHeaderKey[]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - tranDt[20160414070644]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - ----- 출고의뢰결과 송신 디데일 정보 -----
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - ship_node[]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderLineKey[]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - orderReleaseKey[]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - statuscd[09]
+2016-04-21 17:57:29,462 [DEBUG] [nohup ] - statusMsg[ORA-00001: 무결성 제약 조건(ISECCUBE.PK_TBD03C)에 위배됩니다]
+2016-04-21 17:57:29,463 [DEBUG] [nohup ] - shipmentNo[]
+2016-04-21 17:57:29,474 [DEBUG] [nohup ] - qty[1]
+2016-04-21 17:57:29,474 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 17:57:29,474 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 17:57:29,479 [DEBUG] [nohup ] - [출고의뢰결과SEND_KEY]95:SDRY:order:update:C2M
+2016-04-21 17:57:29,494 [DEBUG] [nohup ] - return json data ==>{"org_code":"95","sell_code":"SDRY","orderDt":"20160414","orderId":"100001467","orderHeaderKey":"","tranDt":"20160414070644","status":"3202","list":[{"ship_node":"","orderLineNo":"157","orderLineKey":"","orderReleaseKey":"","shipmentNo":"","itemId":"AYB5CL50410L","uom":"EACH","qty":"1","statuscd":"09","statusMsg":"ORA-00001: 무결성 제약 조건(ISECCUBE.PK_TBD03C)에 위배됩니다"}]}
+2016-04-21 17:57:29,494 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 17:57:29,545 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 17:57:29,545 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 17:57:29,641 [DEBUG] [nohup ] - 0011
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getCall_seq0011
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getCall_apiOrderRetrieveCheck
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getCall_api_name주문정보 확인
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getShip_id0751
+2016-04-21 17:57:29,642 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getResult_code000
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getResult_nameSUCCESS!
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 17:57:29,643 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0011, OrderRetrieveCheck, 주문정보 확인, SDRY, 0751, N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+
+2016-04-21 17:57:33,186 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:57:33,192 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:57:33,198 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 17:57:33,201 [DEBUG] [nohup ] -  프로시져 콜 끝
+2016-04-21 17:57:33,201 [DEBUG] [nohup ] - 2-2. callProcedure 요청 끝
+2016-04-21 17:57:33,201 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 17:57:33,201 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:30,274 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO()
+2016-04-21 18:41:30,336 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:30,336 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.GetVendorList()
+2016-04-21 18:41:30,384 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:30,397 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:30,401 [DEBUG] [nohup ] - vendorList[3]
+2016-04-21 18:41:30,401 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 18:41:30,408 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 18:41:33,430 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 18:41:33,430 [DEBUG] [nohup ] - sell_code[ASPB]
+2016-04-21 18:41:33,430 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:ASPB:order:M2C]
+2016-04-21 18:41:33,430 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 18:41:33,430 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 18:41:33,486 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:33,486 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 18:41:33,494 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0046, OrderProcess, 발주요청, ASPB, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 18:41:40,811 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:40,815 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 18:41:43,179 [DEBUG] [nohup ] - org_code[45]
+2016-04-21 18:41:43,180 [DEBUG] [nohup ] - sell_code[REDM]
+2016-04-21 18:41:43,180 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[45:REDM:order:M2C]
+2016-04-21 18:41:43,180 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[0]
+2016-04-21 18:41:43,180 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 18:41:43,234 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:43,234 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 18:41:43,240 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0047, OrderProcess, 발주요청, REDM, 20160421, 20160421, 100, 조회된데이터가 없습니다., SCAPI]
+
+2016-04-21 18:41:43,249 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:43,252 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 18:41:44,890 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 18:41:44,890 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 18:41:44,890 [DEBUG] [nohup ] - OrderProcess-REDIS_KEY[95:SDRY:order:M2C]
+2016-04-21 18:41:44,890 [DEBUG] [nohup ] - OrderProcess-REDIS_COUNT[1]
+2016-04-21 18:41:44,890 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 시작
+2016-04-21 18:41:44,894 [DEBUG] [nohup ] - Mg API OrderProcess 수신 DATA[{
+  "status" : "3200",
+  "orderId" : "100001467",
+  "tranDt" : "2016-04-14 07:06:44",
+  "vendor_id" : "SDRY",
+  "channelOrderNo" : "123132",
+  "orderDt" : "2016-04-14 07:04:47",
+  "list" : [
+    {
+      "custHp" : "010-9890-7118",
+      "itemId" : "AYB5CL50410L",
+      "orderDt" : "2016-04-14 07:04:47",
+      "receiptAddr2" : "C-401",
+      "receiptAddr1" : "서울특별시 강서구 강서로12길 14-21 (인터시티빌라)",
+      "deliveryMsg" : "",
+      "orderLineNo" : "157",
+      "itemNm" : "Reserve Signature Jar ORCHID",
+      "sell_code" : "SDRY",
+      "qty" : 1,
+      "receiptHp" : "010-9890-7118",
+      "orderLineKey" : "0751",
+      "receiptTel" : "010-9890-7118",
+      "salePrice" : "1000.0000",
+      "custTel" : "010-9890-7118",
+      "org_code" : "95",
+      "custNm" : "　 이천재",
+      "receiptZipcode" : "157-880",
+      "orderId" : "100001467",
+      "receiptNm" : ""
+    }
+  ]
+}]
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 시작
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - status[3200]
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - tranDt[2016-04-14 07:06:44]
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 18:41:44,896 [DEBUG] [nohup ] - Sterling OrderProcess 마스터정보 끝
+2016-04-21 18:41:47,615 [DEBUG] [nohup ] - vendor_id[SDRY]
+2016-04-21 18:41:47,615 [DEBUG] [nohup ] - 처리상태[3200]
+2016-04-21 18:41:47,615 [DEBUG] [nohup ] - 처리업무구분[OrderRetrieve]
+2016-04-21 18:41:47,668 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:47,668 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_RECV_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 18:41:47,675 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_LOG (       		     CALL_DT, CALL_SEQ, CALL_API,             	     CALL_API_NAME, VENDOR_ID, START_DT,     	     END_DT, RESULT_CODE, RESULT_NAME,       	     INUSER, INTIME)                         	  VALUES ( ? ,? ,? ,?        ,? , ?,?                               	      , ?,? ,?                               	      ,to_char(sysdate, 'YYYYMMDDHH24MISS')            )        Parameters: [20160421, 0048, OrderRetrieve, 발주조회, SDRY, 20160421, 20160421, 000, 처리중!!!!!, SCAPI]
+
+2016-04-21 18:41:47,684 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:47,687 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 18:41:47,687 [DEBUG] [nohup ] - call_seq[0048]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 시작
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - orderDt[2016-04-14 07:04:47]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - orderLineKey[0751]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptNm[]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptTel[010-9890-7118]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptHp[010-9890-7118]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptAddr1[서울특별시 강서구 강서로12길 14-21 (인터시티빌라)]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptAddr2[C-401]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - receiptZipcode[157-880]
+2016-04-21 18:41:47,688 [DEBUG] [nohup ] - custNm[　 이천재]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - custTel[010-9890-7118]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - custHp[010-9890-7118]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - deliveryMsg[]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - itemNm[Reserve Signature Jar ORCHID]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - qty[1]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - salePrice[1000.0000]
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - Sterling OrderProcess 주문확정라인 끝
+2016-04-21 18:41:47,689 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 시작
+2016-04-21 18:41:55,538 [DEBUG] [nohup ] -  Query:  INSERT INTO API_RECV_DATA                                          			        (CALL_DT, CALL_SEQ, SEQ, RECV_GB, FIRST_ORDER_ID, ORDER_ID,          	        SHIP_ID, TRANS_DT, VENDOR_ID, INSTRUCT_DT, CANCEL_DT, CHANGE_GB,     	        SHIP_STATUS, RECEIPT_NM, RECEIPT_TEL, RECEIPT_HP,                    	        RECEIPT_ZIPCODE, RECEIPT_ADDR1, RECEIPT_ADDR2, CUST_NM,              	        CUST_TEL, CUST_HP, CUST_ZIPCODE, CUST_ADDR1, CUST_ADDR2,             	        DELIVERY_MSG, ORDER_SEQ, SHIP_SEQ, ITEM_CD, ITEM_NM, OPTION1,        	        OPTION2, SALE_PRICE, DELI_PRICE, QTY, DELI_GB, ERROR_CODE,           	        ERROR_MSG, INUSER, INTIME, ORI_SHIP_ID , RET_CODE, TRANS_STATUS,	 	        CUST_EMAIL, CLAME_MEMO, CUBE_ITEM , COCD , WHCD	, ORDER_KEY, 			        ORDERSEQ_KEY, SHIP_KEY, VENDOR_NM , STORE_GB , VENDOR_PONO				             )                                                               	      VALUES ( ?, ?, ?, ?, ?, ?,            						         	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?,                                                    	              ?, ?, ?, ?, ?,                                                 	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS'), ?, ?, '40',	              ?, ?, ?, ?, ?, ?,                                              	              ?, ?, ?, ?, ?					                                                 )                                                               	 Parameters: [20160421, 0048, 1, 10, 100001467, 100001467, 0751, 20160414070644, SDRY, 20160414, , , , , 010-9890-7118, 010-9890-7118, 157-880, 서울특별시 강서구 강서로12길 14-21 (인터시티빌라), C-401, 　 이천재, 010-9890-7118, 010-9890-7118, , , , , 157, 157, AYB5CL50410L, Reserve Signature Jar ORCHID, , , 1000, 0, 1, , 00, SUCCESS, SCAPI, , , , , , 95, , , , , SDRY, , 123132]
+
+2016-04-21 18:41:57,764 [DEBUG] [nohup ] - result[1]
+2016-04-21 18:41:57,764 [DEBUG] [nohup ] - 2-1. API_RECV_DATA INSERT 요청 끝
+2016-04-21 18:41:57,764 [DEBUG] [nohup ] - 2-2. callProcedure 요청 시작
+2016-04-21 18:41:57,764 [DEBUG] [nohup ] - insertErrCnt[0]
+2016-04-21 18:41:57,764 [DEBUG] [nohup ] - API_RECV_DATA INSERT 정상
+2016-04-21 18:41:57,778 [DEBUG] [nohup ] -  프로시져 콜 시작
+2016-04-21 18:41:57,779 [DEBUG] [nohup ] -  callProcedure() CALL 
+2016-04-21 18:41:57,779 [DEBUG] [nohup ] - call_api[OrderRetrieve]
+2016-04-21 18:41:57,853 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:57,853 [DEBUG] [nohup ] - 주문 연동 시작
+2016-04-21 18:41:58,168 [DEBUG] [nohup ] - 주문 연동 끝
+2016-04-21 18:41:58,169 [DEBUG] [nohup ] - transcd[40]
+2016-04-21 18:41:58,169 [DEBUG] [nohup ] - 처리결과 전송 CALL
+2016-04-21 18:41:58,169 [DEBUG] [nohup ] - com.service.ScApiCreateREDIS.api_Auto_PO_Send()
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - ----- 출고의뢰결과 조회조건 -----
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - call_dt[20160421]
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - call_seq[0048]
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - command[10]
+2016-04-21 18:41:58,211 [DEBUG] [nohup ] - transCD[40]
+2016-04-21 18:41:58,212 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - ----- 출고의뢰결과 송신 헤더정보 -----
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - org_code[95]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - orderDt[20160414]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - orderId[100001467]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - orderHeaderKey[]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - tranDt[20160414070644]
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - ----- 출고의뢰결과 송신 디데일 정보 -----
+2016-04-21 18:41:58,221 [DEBUG] [nohup ] - ship_node[]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - orderLineNo[157]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - orderLineKey[]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - orderReleaseKey[]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - itemId[AYB5CL50410L]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - statuscd[09]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - statusMsg[ORA-00001: 무결성 제약 조건(ISECCUBE.PK_TBD03C)에 위배됩니다]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - shipmentNo[]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - qty[1]
+2016-04-21 18:41:58,222 [DEBUG] [nohup ] - ----- -------------------------- -----
+2016-04-21 18:41:58,223 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-21 18:41:58,229 [DEBUG] [nohup ] - [출고의뢰결과SEND_KEY]95:SDRY:order:update:C2M
+2016-04-21 18:41:58,232 [DEBUG] [nohup ] - return json data ==>{"org_code":"95","sell_code":"SDRY","orderDt":"20160414","orderId":"100001467","orderHeaderKey":"","tranDt":"20160414070644","status":"3202","list":[{"ship_node":"","orderLineNo":"157","orderLineKey":"","orderReleaseKey":"","shipmentNo":"","itemId":"AYB5CL50410L","uom":"EACH","qty":"1","statuscd":"09","statusMsg":"ORA-00001: 무결성 제약 조건(ISECCUBE.PK_TBD03C)에 위배됩니다"}]}
+2016-04-21 18:41:58,232 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-21 18:41:58,282 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-21 18:41:58,282 [DEBUG] [nohup ] -  Query:  SELECT /*+ INDEX_DESC(CALL_DT,CALL_SEQ) */						 				         LTRIM(TO_CHAR(TO_NUMBER(NVL(MAX(CALL_SEQ), 0)) + 1, '0000')) as CALL_SEQ    FROM API_SEND_LOG															   WHERE CALL_DT = TO_CHAR(SYSDATE,'YYYYMMDD') 						 			  Parameters: []
+
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - 0012
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] -  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getCall_dt20160421
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getCall_seq0012
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getCall_apiOrderRetrieveCheck
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getCall_api_name주문정보 확인
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getVendor_idSDRY
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getShip_id0751
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getApply_dtN/A
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getApply_timeN/A
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getDeli_company_idN/A
+2016-04-21 18:41:58,327 [DEBUG] [nohup ] - getBl_noN/A
+2016-04-21 18:41:58,328 [DEBUG] [nohup ] - getResult_code000
+2016-04-21 18:41:58,328 [DEBUG] [nohup ] - getResult_nameSUCCESS!
+2016-04-21 18:41:58,328 [DEBUG] [nohup ] - getInuserSCAPI
+2016-04-21 18:41:58,328 [DEBUG] [nohup ] - getCancel_code00
+2016-04-21 18:41:58,328 [DEBUG] [nohup ] -  Query:  INSERT INTO API_SEND_LOG                                           				       (CALL_DT, CALL_SEQ, CALL_API, CALL_API_NAME, VENDOR_ID, SHIP_ID,      		        APPLY_DT, APPLY_TIME, DELI_COMPANY_ID, BL_NO, RESULT_CODE,           		        RESULT_NAME, INUSER, INTIME, CANCEL_CODE									       )                                                                     		      VALUES ( ?, ?, ?, ?, ?, ?,                    								              ?, ?, ?, ?, ?,                                                 		              ?, ?, to_char(sysdate, 'YYYYMMDDHH24MISS' ), ?						             )                                                               		 Parameters: [20160421, 0012, OrderRetrieveCheck, 주문정보 확인, SDRY, 0751, N/A, N/A, N/A, N/A, 000, SUCCESS!, SCAPI, 00]
+
+2016-04-21 18:41:58,353 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:58,356 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:58,361 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-21 18:41:58,364 [DEBUG] [nohup ] -  프로시져 콜 끝
+2016-04-21 18:41:58,364 [DEBUG] [nohup ] - 2-2. callProcedure 요청 끝
+2016-04-21 18:41:58,365 [DEBUG] [nohup ] - 2. Sterling OrderProcess 수신데이터 처리 끝
+2016-04-21 18:41:58,365 [DEBUG] [nohup ] - DB Connect out : iseccube Driver

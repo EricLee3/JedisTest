@@ -1,0 +1,143 @@
+2016-04-12 15:46:28,036 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_RecvProductData()
+2016-04-12 15:46:36,695 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-12 15:46:38,051 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성 시작
+2016-04-12 15:46:53,552 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성  끝
+2016-04-12 15:46:55,860 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-12 15:46:56,623 [DEBUG] [nohup ] - Reids ip: 121.189.18.56
+2016-04-12 15:46:57,291 [DEBUG] [nohup ] - Reids port: 6379
+2016-04-12 15:47:01,035 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-12 15:47:10,820 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 15:47:11,514 [DEBUG] [nohup ] - [VDCD[ASPB]
+2016-04-12 15:47:12,119 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 15:47:15,114 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 15:47:15,777 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:47:18,920 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 15:47:23,570 [DEBUG] [nohup ] - [COCD[45]
+2016-04-12 15:47:24,907 [DEBUG] [nohup ] - [VDCD[REDM]
+2016-04-12 15:47:25,408 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[45:product:M2C]
+2016-04-12 15:47:25,857 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 15:47:27,385 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:47:31,250 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 15:47:35,377 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 15:47:35,778 [DEBUG] [nohup ] - [VDCD[SDRY]
+2016-04-12 15:47:36,276 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 15:47:36,774 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[2]
+2016-04-12 15:47:37,624 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:47:44,882 [DEBUG] [nohup ] - Magento 상품처리결과 DATA[{"list":[{"statuscd":"01","tranDate":"20160329","tranSeq":"4","org_code":"95","prodinc":"S0G5GHZ01"}]}]
+2016-04-12 15:47:48,168 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 시작
+2016-04-12 15:47:48,837 [DEBUG] [nohup ] - 95_size[1]
+2016-04-12 15:47:51,954 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_RecvProductData() Error :net.sf.json.JSONException: JSONObject["tran_date"] not found.
+2016-04-12 15:48:22,708 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-12 15:53:15,023 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_RecvProductData()
+2016-04-12 15:53:15,955 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-12 15:53:15,955 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성 시작
+2016-04-12 15:53:15,955 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성  끝
+2016-04-12 15:53:15,955 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-12 15:53:15,955 [DEBUG] [nohup ] - Reids ip: 121.189.18.56
+2016-04-12 15:53:15,956 [DEBUG] [nohup ] - Reids port: 6379
+2016-04-12 15:53:31,053 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-12 15:53:31,152 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 15:53:31,152 [DEBUG] [nohup ] - [VDCD[ASPB]
+2016-04-12 15:53:31,152 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 15:53:31,153 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 15:53:31,153 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:53:31,153 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 15:53:31,155 [DEBUG] [nohup ] - [COCD[45]
+2016-04-12 15:53:31,155 [DEBUG] [nohup ] - [VDCD[REDM]
+2016-04-12 15:53:31,155 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[45:product:M2C]
+2016-04-12 15:53:31,156 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 15:53:31,156 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:53:31,156 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 15:53:31,158 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 15:53:31,158 [DEBUG] [nohup ] - [VDCD[SDRY]
+2016-04-12 15:53:31,158 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 15:53:31,158 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[1]
+2016-04-12 15:53:31,158 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 15:53:36,455 [DEBUG] [nohup ] - Magento 상품처리결과 DATA[{"list":[{"statuscd":"01","tranDate":"20160329","tranSeq":"5","org_code":"95","prodinc":"S0H12PT01"}]}]
+2016-04-12 15:53:38,159 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 시작
+2016-04-12 15:53:38,608 [DEBUG] [nohup ] - 95_size[1]
+2016-04-12 15:53:49,383 [DEBUG] [nohup ] - ###Error###:com.service.CubeAPItoMg.api_RecvProductData() Error :net.sf.json.JSONException: JSONObject["sell_code"] not found.
+2016-04-12 15:53:49,383 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-12 17:15:13,956 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_RecvProductData()
+2016-04-12 17:15:15,784 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-12 17:15:15,784 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성 시작
+2016-04-12 17:15:15,784 [DEBUG] [nohup ] - 0. Magento 상품 수신후 UPDATE SQL 작성  끝
+2016-04-12 17:15:15,784 [DEBUG] [nohup ] - 1. Redis connection 생성 시작
+2016-04-12 17:15:15,784 [DEBUG] [nohup ] - Reids ip: 121.189.18.56
+2016-04-12 17:15:15,785 [DEBUG] [nohup ] - Reids port: 6379
+2016-04-12 17:15:15,812 [DEBUG] [nohup ] - 1. Redis connection 생성 끝
+2016-04-12 17:15:16,074 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 17:15:16,075 [DEBUG] [nohup ] - [VDCD[ASPB]
+2016-04-12 17:15:16,075 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 17:15:16,075 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 17:15:16,075 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 17:15:16,075 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 17:15:16,078 [DEBUG] [nohup ] - [COCD[45]
+2016-04-12 17:15:16,078 [DEBUG] [nohup ] - [VDCD[REDM]
+2016-04-12 17:15:16,078 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[45:product:M2C]
+2016-04-12 17:15:16,078 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[0]
+2016-04-12 17:15:16,078 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 17:15:16,079 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 17:15:16,082 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 17:15:16,082 [DEBUG] [nohup ] - [VDCD[SDRY]
+2016-04-12 17:15:16,082 [DEBUG] [nohup ] - 상품수신-REDIS_KEY[95:product:M2C]
+2016-04-12 17:15:16,082 [DEBUG] [nohup ] - 상품수신-REDIS_COUNT[2]
+2016-04-12 17:15:16,082 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 시작
+2016-04-12 17:15:21,523 [DEBUG] [nohup ] - Magento 상품처리결과 DATA[{"list":[{"statuscd":"01","tranDate":"20160329","tranSeq":"4","org_code":"95","sell_code":"SDRY","prodinc":"S0G5GHZ01"}]}]
+2016-04-12 17:15:26,175 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 시작
+2016-04-12 17:15:26,585 [DEBUG] [nohup ] - 95_size[1]
+2016-04-12 17:15:32,253 [DEBUG] [nohup ] - tranDate[20160329]
+2016-04-12 17:15:32,753 [DEBUG] [nohup ] - tranSeq[4]
+2016-04-12 17:15:33,274 [DEBUG] [nohup ] - org_code[95]
+2016-04-12 17:15:33,807 [DEBUG] [nohup ] - prodinc[S0G5GHZ01]
+2016-04-12 17:15:34,342 [DEBUG] [nohup ] - statuscd[01]
+2016-04-12 17:15:34,903 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-12 17:15:57,926 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 끝
+2016-04-12 17:16:01,990 [DEBUG] [nohup ] - Magento 상품처리결과 DATA[{"list":[{"statuscd":"01","tranDate":"20160329","tranSeq":"5","org_code":"95","sell_code":"SDRY","prodinc":"S0H12PT01"}]}]
+2016-04-12 17:16:03,502 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 시작
+2016-04-12 17:16:04,038 [DEBUG] [nohup ] - 95_size[1]
+2016-04-12 17:16:08,693 [DEBUG] [nohup ] - tranDate[20160329]
+2016-04-12 17:16:09,205 [DEBUG] [nohup ] - tranSeq[5]
+2016-04-12 17:16:09,676 [DEBUG] [nohup ] - org_code[95]
+2016-04-12 17:16:10,151 [DEBUG] [nohup ] - prodinc[S0H12PT01]
+2016-04-12 17:16:10,574 [DEBUG] [nohup ] - statuscd[01]
+2016-04-12 17:16:11,025 [DEBUG] [nohup ] - sell_code[SDRY]
+2016-04-12 17:16:18,486 [DEBUG] [nohup ] - 2-1. Sterling 수신데이터 파싱 끝
+2016-04-12 17:16:24,323 [DEBUG] [nohup ] - 2. Sterling 수신데이터 처리 끝
+2016-04-12 17:16:31,647 [DEBUG] [nohup ] - DB Connect out : iseccube Driver
+2016-04-12 18:12:52,005 [DEBUG] [nohup ] - com.service.CubeAPItoMg.api_Auto_SendItemStock
+2016-04-12 18:12:52,950 [DEBUG] [nohup ] - DB Connect : iseccube Driver
+2016-04-12 18:12:52,950 [DEBUG] [nohup ] - 0. Sterling 재고 송신 SQL 시작
+2016-04-12 18:12:53,008 [DEBUG] [nohup ] - 0. Sterling 재고 송신 SQL 끝
+2016-04-12 18:12:53,084 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 18:12:53,084 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 시작
+2016-04-12 18:12:53,760 [DEBUG] [nohup ] - errcode[00]
+2016-04-12 18:12:53,760 [DEBUG] [nohup ] - errmsg[SUCCESS]
+2016-04-12 18:12:53,760 [DEBUG] [nohup ] - tranDt[20160412]
+2016-04-12 18:12:53,760 [DEBUG] [nohup ] - tranSeq[1]
+2016-04-12 18:12:53,760 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 끝
+2016-04-12 18:12:54,184 [DEBUG] [nohup ] - 2. Sterling 재고송신 JSON형식 API항목 정의 시작
+2016-04-12 18:12:54,239 [DEBUG] [nohup ] - 2. Sterling 재고송신 JSON형식 API항목 정의 끝
+2016-04-12 18:12:54,239 [DEBUG] [nohup ] - [3. Redis Connection 시작]
+2016-04-12 18:12:54,308 [DEBUG] [nohup ] - [재고SEND_KEY]95:inventory:C2M
+2016-04-12 18:12:54,312 [DEBUG] [nohup ] - [3. Redis Connection 끝]
+2016-04-12 18:12:54,312 [DEBUG] [nohup ] - [COCD[45]
+2016-04-12 18:12:54,312 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 시작
+2016-04-12 18:12:54,327 [DEBUG] [nohup ] - errcode[00]
+2016-04-12 18:12:54,327 [DEBUG] [nohup ] - errmsg[SUCCESS]
+2016-04-12 18:12:54,327 [DEBUG] [nohup ] - tranDt[20160412]
+2016-04-12 18:12:54,327 [DEBUG] [nohup ] - tranSeq[2]
+2016-04-12 18:12:54,327 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 끝
+2016-04-12 18:12:54,333 [DEBUG] [nohup ] - [COCD[95]
+2016-04-12 18:12:54,333 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 시작
+2016-04-12 18:12:54,374 [DEBUG] [nohup ] - errcode[00]
+2016-04-12 18:12:54,375 [DEBUG] [nohup ] - errmsg[SUCCESS]
+2016-04-12 18:12:54,375 [DEBUG] [nohup ] - tranDt[20160412]
+2016-04-12 18:12:54,375 [DEBUG] [nohup ] - tranSeq[2]
+2016-04-12 18:12:54,375 [DEBUG] [nohup ] - 1. Sterling 재고 프로시져 끝
+2016-04-12 18:12:54,385 [DEBUG] [nohup ] - 2. Sterling 재고송신 JSON형식 API항목 정의 시작
+2016-04-12 18:12:54,392 [DEBUG] [nohup ] - 2. Sterling 재고송신 JSON형식 API항목 정의 끝
+2016-04-12 18:12:54,393 [DEBUG] [nohup ] - [3. Redis Connection 시작]
+2016-04-12 18:12:54,400 [DEBUG] [nohup ] - [재고SEND_KEY]95:inventory:C2M
+2016-04-12 18:12:54,404 [DEBUG] [nohup ] - [3. Redis Connection 끝]
+2016-04-12 18:12:54,404 [DEBUG] [nohup ] - DB Connect out : iseccube Driver

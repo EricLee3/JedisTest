@@ -372,7 +372,7 @@ public class ServiceDAO extends ServiceQuery{
 			params.add(dataInfo.getRecv_gb());
 			params.add(dataInfo.getFirst_order_id());
 			params.add(dataInfo.getOrder_id());
-			params.add(dataInfo.getShipKey());
+			params.add(dataInfo.getShip_id());
 			params.add(dataInfo.getTrans_dt());
 			params.add(dataInfo.getVendor_id());
 			params.add(dataInfo.getInstruct_dt());
@@ -416,8 +416,8 @@ public class ServiceDAO extends ServiceQuery{
 			params.add(dataInfo.getVendorNm());
 			params.add(dataInfo.getRet_desc());             // 반품사유상세 추가(2015.02.25 하윤식)          
 			params.add(dataInfo.getItem_status());          // 상품등급     추가(2015.02.25 하윤식)
-			params.add(dataInfo.getOrderReleaseKey_org());  // 원주문확정키 추가(2015.02.25 하윤식)
-			params.add(dataInfo.getOrderLineNo_org());      // 원주문순번   추가(2015.02.25 하윤식)
+			params.add(dataInfo.getOri_ship_id()); 		 	// 원주문라인키 추가(2015.04.11)
+			//params.add(dataInfo.getOrderLineNo_org());      // 원주문순번   추가(2015.02.25 하윤식)
 			
 			
 			result = ExecQuery.update(conn, sql, params);
