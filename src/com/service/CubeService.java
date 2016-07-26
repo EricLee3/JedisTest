@@ -578,13 +578,21 @@ public class CubeService {
 							    for (int i = 0; i < ResultItemArray.size(); i++)  {
 									JSONObject rtList = ResultItemArray.getJSONObject(i);
 									rtBarcode = StringUtil.nullTo(rtList.getString("barcode"),""); 
-									rtAssortId = StringUtil.nullTo(rtList.getString("assorId"),""); 
+									rtAssortId = StringUtil.nullTo(rtList.getString("assortId"),""); 
 									rtItemId = StringUtil.nullTo(rtList.getString("itemId"),""); 
 									rtStatusCd = StringUtil.nullTo(rtList.getString("statusCd"),""); 
 									rtStatusMsg = StringUtil.nullTo(rtList.getString("statusMsg"),""); 
 									rtTranDate = StringUtil.nullTo(rtList.getString("tranDate"),"");
 									rtTranSeq = StringUtil.nullTo(rtList.getString("tranSeq"),"");
-												
+									
+									/////////////////////////////////////////////////////////////////////////
+									if (pstmt2 != null)  {
+										pstmt2.close();
+										pstmt2 = null;
+									}
+									pstmt2 = conn.prepareStatement(sqlBuffer2.toString());
+									/////////////////////////////////////////////////////////////////////////
+									
 								    // Cube update query calls
 									pstmt2.setString(1, rtAssortId);
 									pstmt2.setString(2, rtItemId);
@@ -597,10 +605,10 @@ public class CubeService {
 									pstmt2.setString(9, cocd);
 									pstmt2.setString(10, vdcd);
 									pstmt2.setString(11, rtBarcode);
-
-									// update to be successful
-									rs2 = pstmt2.executeQuery();
 									
+									// update to be successful
+									int x = pstmt2.executeUpdate();
+									Logger.debug("Query : " + pstmt2.toString());
 									rtList.clear();
 							    } // end for
 							    ResultItemArray.clear();
@@ -612,7 +620,7 @@ public class CubeService {
 					    post.releaseConnection();
 					    // Post 전송 수정 End - KBJ
 					} catch (Exception e)  {
-					
+						System.out.println(e);
 					}
 					
 					count++;		// 사업부별 성공 카운트
