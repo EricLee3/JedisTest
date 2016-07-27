@@ -5,29 +5,20 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.sql.Types;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -35,20 +26,21 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node; 
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.service.command.connection.DataBaseManager;
+import com.service.command.log.Logger;
+//import com.sun.java_cup.internal.production;
 import com.service.command.util.CommonUtil;
 import com.service.command.util.StringUtil;
 import com.service.dao.ServiceDAO;
 import com.service.entity.ServiceDataInfo;
 import com.service.entity.ServiceLogInfo;
 import com.service.entity.ServiceShoplinkerInfo;
-import com.service.CubeApiCreateJSON;
 
-import com.service.command.log.Logger;
-//import com.sun.java_cup.internal.production;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 /**
  * CubeService.java
@@ -357,7 +349,7 @@ public class CubeService {
 						post.releaseConnection();
 						// Post 전송 수정 End - KBJ
 					} catch (Exception e)  {
-					
+						Logger.debug("IOS - Exception occurred : " + e);
 					}
 	
 					// initializing sending object
@@ -681,7 +673,9 @@ public class CubeService {
 		PreparedStatement	pstmt1		= null; //     주 쿼리문 실행
 		PreparedStatement	pstmt2		= null; //   서브 쿼리문 실행
 		PreparedStatement	pstmt3		= null; // 카운트 쿼리문 실행
-	
+
+		CallableStatement 	cstmt    	= null;	// for procedure call of Cube		
+
 		/* ResultSet 선언 */
 		ResultSet			rs0			= null;
 		ResultSet			rs1			= null;
@@ -705,16 +699,89 @@ public class CubeService {
 			Logger.debug("0. Favinit 재고정보 전송을 위한 SQL 작성 시작");
 			
 			/* 0. Favinit 재고정보 전송을위한 SQL 작성 시작*/
-			sqlBuffer0.append("SELECT   RETC AS COCD							\n");	
+			sqlBuffer0.append("SELECT   RETC AS COCD			\n");	
+			sqlBuffer0.append("	, REFCD  AS VENDOR_ID			\n");	
+			sqlBuffer0.append("	FROM TBB150						\n");
+			sqlBuffer0.append("	WHERE REFTP = 'ZY'				\n");
+			sqlBuffer0.append("	AND REFCD <> '0000'				\n");
+			sqlBuffer0.append("	AND USEYN = 'Y'					\n");
+			sqlBuffer0.append("	AND CD3   = 'Y'					\n");
+			sqlBuffer0.append("	AND CD4   = '"+ transcd +"'		\n");
+			sqlBuffer0.append("	GROUP BY RETC, REFCD			\n");
 			
-			/* 0-1. 주 쿼리문*/
-			sqlBuffer1.append("SELECT    MAX(A.VENDOR_ID)      AS VENDOR_ID		\n");	
+			/* 0-1. FAVINIT 재고 송신 SQL 시작 */
+			sqlBuffer1.append("SELECT A.TRAN_DATE						\n");
+			sqlBuffer1.append("	, A.TRAN_SEQ							\n");
+			sqlBuffer1.append("	, A.BARCODE								\n");
+			sqlBuffer1.append("	, A.STOCK								\n");
+			sqlBuffer1.append("	FROM TBD260 A							\n");
+			sqlBuffer1.append("	, (SELECT A.TRAN_DATE					\n");
+			sqlBuffer1.append("	, 		MAX(A.TRAN_SEQ) AS TRAN_SEQ		\n");
+			sqlBuffer1.append("	, 		A.BARCODE						\n");
+			sqlBuffer1.append("		FROM TBD260 A						\n");
+			sqlBuffer1.append("	, ( SELECT BARCODE						\n");
+			sqlBuffer1.append("		, MAX(TRAN_DATE) AS TRAN_DATE		\n");
+			sqlBuffer1.append("		, MAX(VENDOR_ID) AS VENDOR_ID		\n");
+			sqlBuffer1.append("		, MAX(COCD)      AS COCD			\n");
+			sqlBuffer1.append("		 FROM TBD260 						\n");
+			sqlBuffer1.append("		WHERE STATUS   IN('00','99')  		\n");
+			sqlBuffer1.append("		AND VENDOR_ID = ?					\n");
+			sqlBuffer1.append("		AND COCD      = ?					\n");
+			sqlBuffer1.append("		AND TRAN_DATE BETWEEN TO_CHAR(SYSDATE -4, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')\n");
+			sqlBuffer1.append("		GROUP BY BARCODE					\n");
+			sqlBuffer1.append("		) B									\n");
+			sqlBuffer1.append("		WHERE A.TRAN_DATE = B.TRAN_DATE		\n");
+			sqlBuffer1.append("			AND A.BARCODE   = B.BARCODE		\n");
+			sqlBuffer1.append("			AND A.VENDOR_ID = ?				\n");
+			sqlBuffer1.append("			AND A.COCD      = ?				\n");
+			sqlBuffer1.append("		GROUP BY A.TRAN_DATE, A.BARCODE		\n");
+			sqlBuffer1.append("		) B									\n");
+			sqlBuffer1.append("	WHERE A.TRAN_DATE = B.TRAN_DATE			\n");
+			sqlBuffer1.append("	AND A.TRAN_SEQ  = B.TRAN_SEQ			\n");
+			sqlBuffer1.append("	AND A.BARCODE   = B.BARCODE				\n");
+			sqlBuffer1.append("	ORDER BY 1,2,3							\n");
 			
-			/* 0-2. 서브 쿼리문*/
-			sqlBuffer2.append("SELECT   ITEM_COLOR                              \n");
-			
-			/* 0-3. 카운트 쿼리문*/
-			sqlBuffer3.append("SELECT    COUNT(1) AS CNT					    \n");				
+			/* 0-2. FAVINIT 재고 CNT SQL */
+			sqlBuffer2.append("SELECT COUNT(1) AS CNT																			\n");
+			sqlBuffer2.append("FROM TBD260 A                                                                                    \n");
+			sqlBuffer2.append(", (SELECT A.TRAN_DATE                                                                            \n");
+			sqlBuffer2.append(", MAX(A.TRAN_SEQ) AS TRAN_SEQ                                                                    \n");
+			sqlBuffer2.append(", A.BARCODE                                                                                      \n");
+			sqlBuffer2.append("FROM TBD260 A                                                                                    \n");
+			sqlBuffer2.append(", ( SELECT BARCODE                                                                               \n");
+			sqlBuffer2.append(", MAX(TRAN_DATE) AS TRAN_DATE                                                                    \n");
+			sqlBuffer2.append(", MAX(VENDOR_ID) AS VENDOR_ID                                                                    \n");
+			sqlBuffer2.append(", MAX(COCD)      AS COCD                                                                         \n");
+			sqlBuffer2.append("FROM TBD260                                                                                      \n");
+			sqlBuffer2.append("WHERE STATUS   IN('00','99')                                                                     \n");
+			sqlBuffer2.append("AND VENDOR_ID = ?                                                                                \n");
+			sqlBuffer2.append("AND COCD      = ?                                                                                \n");
+			sqlBuffer2.append("AND TRAN_DATE BETWEEN TO_CHAR(SYSDATE -4, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')           \n");
+			sqlBuffer2.append("GROUP BY BARCODE                                                                                 \n");
+			sqlBuffer2.append(") B                                                                                              \n");
+			sqlBuffer2.append("WHERE A.TRAN_DATE = B.TRAN_DATE                                                                  \n");
+			sqlBuffer2.append("AND A.BARCODE   = B.BARCODE                                                                      \n");
+			sqlBuffer2.append("AND A.VENDOR_ID = ?                                                                              \n");
+			sqlBuffer2.append("AND A.COCD      = ?                                                                              \n");
+			sqlBuffer2.append("GROUP BY A.TRAN_DATE, A.BARCODE                                                                  \n");
+			sqlBuffer2.append(") B                                                                                              \n");
+			sqlBuffer2.append("WHERE A.TRAN_DATE = B.TRAN_DATE                                                                  \n");
+			sqlBuffer2.append("AND A.TRAN_SEQ  = B.TRAN_SEQ                                                                     \n");
+			sqlBuffer2.append("AND A.BARCODE   = B.BARCODE                                                                      \n");
+			                                                                                                                        
+
+			/* 0-3. FAVINIT 재고전송후 결과반영 */                                                                                           
+			sqlBuffer3.append("UPDATE TBD260                                                                              \n");
+			sqlBuffer3.append("SET STATUS     = DECODE(?, '01', '05' ,?)      		\n");
+			sqlBuffer3.append(", STATUS_MSG = ?                               		\n");
+			sqlBuffer3.append(", RECV_DATE  = ?                               		\n");
+			sqlBuffer3.append(", RECV_SEQ   = ?                               		\n");
+			sqlBuffer3.append(", UPDUSER	= 'FAV_ING'                       	    \n");
+			sqlBuffer3.append(", UPDTIME	= TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')   \n");
+			sqlBuffer3.append("WHERE TRAN_DATE BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')   \n");
+			sqlBuffer3.append("AND COCD       = ?   		                        \n");
+			sqlBuffer3.append("AND VENDOR_ID  = ?                			        \n");
+			sqlBuffer3.append("AND STATUS    IN ('00', '99')                        \n");	
 			
 			pstmt0 = conn.prepareStatement(sqlBuffer0.toString()); 			
 			pstmt1 = conn.prepareStatement(sqlBuffer1.toString()); 
@@ -728,64 +795,68 @@ public class CubeService {
 				int errCnt 		= 0;
 				int cnt 		= 0;
 				
-				String cocd = StringUtil.nullTo(rs0.getString("COCD"),"");
-				String vdcd = StringUtil.nullTo(rs0.getString("VDCD"),"");
-				String refCd = StringUtil.nullTo(rs0.getString("REFCD"), "");
+				String cocd = StringUtil.nullTo(rs0.getString("COCD"),"");			// 95
+				String refCd = StringUtil.nullTo(rs0.getString("VENDOR_ID"), "");	// 3001177
 				
-				Logger.debug("[COCD["+StringUtil.nullTo(rs0.getString("COCD"),"")+"]");
-				Logger.debug("[VDCD["+StringUtil.nullTo(rs0.getString("VDCD"),"")+"]");
-				Logger.debug("[REFCD["+StringUtil.nullTo(rs0.getString("REFCD"),"")+"]");
+		
+				/* 1. Sterling 재고 프로시져 시작 */
+				Logger.debug("1. Sterling 재고 프로시져 시작");
 				
-				pstmt3.setString(1, cocd);
-				pstmt3.setString(2, vdcd);
-				pstmt3.setString(3, refCd);
-				pstmt3.setString(4, cocd);
-				pstmt3.setString(5, refCd);
+				if (cstmt != null) { cstmt.close(); cstmt = null; }				
+				cstmt = conn.prepareCall("{call P_SEND_STOCK(?, ?, ?, ?, ?, ?, ?)}");
+				cstmt.registerOutParameter(1, Types.CHAR);
+	        	cstmt.registerOutParameter(2, Types.CHAR);
+	        	cstmt.registerOutParameter(3, Types.CHAR);
+	        	cstmt.registerOutParameter(4, Types.INTEGER);
+	        	cstmt.setString(5, transcd);
+	        	cstmt.setString(6, refCd);		        	
+	        	cstmt.setString(7, cocd);	        	
+	        	
+	        	cstmt.executeUpdate();
+	        	
+	        	String errcode 	= cstmt.getString(1);
+	        	String errmsg 	= cstmt.getString(2);	
+	            String tranDt  	= cstmt.getString(3);
+	            int    tranSeq 	= cstmt.getInt(4);
+
+				// QUERY FOR COUNT				
+				pstmt2.setString(1, refCd);
+				pstmt2.setString(2, cocd);
+				pstmt2.setString(3, refCd);
+				pstmt2.setString(4, cocd);
 				
-				rs3 = pstmt3.executeQuery();
-				if (rs3.next())  {
-					cnt = rs3.getInt("CNT");
+				rs2 = pstmt2.executeQuery();
+				if (rs2.next())  {
+					cnt = rs2.getInt("CNT");
 				}
 				
 				if(cnt > 0)  { //전송 DATA 있을때..
-					pstmt1.setString(1, cocd);
-					pstmt1.setString(2, vdcd);
+					pstmt1.setString(1, refCd);
+					pstmt1.setString(2, cocd);
 					pstmt1.setString(3, refCd);
 					pstmt1.setString(4, cocd);
-					pstmt1.setString(5, refCd);
-					
+										
 					rs1 = pstmt1.executeQuery();
 					
-					JSONObject 	jsonObject 		= new JSONObject();
+					JSONObject 	sendingStockInfo 		= new JSONObject();
 					JSONArray 	prodincArray 	= new JSONArray();
 					JSONObject prodList = new JSONObject();
 
 					// 품목 및 재고정보 리스트 조회
 					while(rs1.next())  {
-						prodList.put("vendor_id",StringUtil.nullTo(rs1.getString("VENDOR_ID"),""));		
-						prodList.put("prodinc",StringUtil.nullTo(rs1.getString("PRODINC"),""));									
-						prodList.put("pname",StringUtil.nullTo(rs1.getString("PNAME"),""));				
-						prodList.put("brand_nm",StringUtil.nullTo(rs1.getString("BRAND_NM"),""));		
-						prodList.put("local_price",StringUtil.nullTo(rs1.getString("FIPRI"),""));		 					
+						prodList.put("vendorId",StringUtil.nullTo(refCd,""));		
+						prodList.put("bar_code",StringUtil.nullTo(rs1.getString("BARCODE"),""));									
+						prodList.put("stockQty",StringUtil.nullTo(rs1.getString("STOCK"),""));				
 						
-						// 바코드 정보 가져오기..
-						pstmt2.setString(1, StringUtil.nullTo(rs1.getString("TRAN_DATE"),""));
-						pstmt2.setString(2, StringUtil.nullTo(rs1.getString("TRAN_SEQ"),""));
-						pstmt2.setString(3, cocd);
-						pstmt2.setString(4, refCd);						
-						pstmt2.setString(5, StringUtil.nullTo(rs1.getString("PRODINC"),""));
-						
-						rs2 = pstmt2.executeQuery();
-						JSONArray cellOpt = new JSONArray();
-					
+			
 						prodincArray.add(prodList);
 						
 						prodList.clear();
 					} // 상품 전송단위 JSON 생성 
-					jsonObject.put("list", prodincArray);	// it does not mean the string 'list' appears only once
+					sendingStockInfo.put("list", prodincArray);	// it does not mean the string 'list' appears only once
 	
 					try   {
-						Logger.debug("Json Object : "+jsonObject.toString());
+						Logger.debug("Json Object : "+ sendingStockInfo.toString());
 						String url = "http://prs.favinit.com/CubeAPI/StockModAPI.asp";
 						PostMethod post = new PostMethod(url);
 						int conTimeOut = 120000;
@@ -802,7 +873,7 @@ public class CubeService {
 						connectionManager.closeIdleConnections(idleTimeOut);
 						connectionManager.getParams().setMaxTotalConnections(100);
 						post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=euc-kr");
-						post.addParameter("data", URLEncoder.encode(jsonObject.toString(), "euc-kr"));
+						post.addParameter("data", URLEncoder.encode(sendingStockInfo.toString(), "euc-kr"));
 						int resultCode = httpClient.executeMethod(post);
 						
 						if (resultCode == 200)  {
@@ -827,19 +898,22 @@ public class CubeService {
 							rtTranDate = StringUtil.nullTo(jObj.getString("tranDate"),""); 
 							rtTranSeq = StringUtil.nullTo(jObj.getString("tranSeq"),""); 
 							
-							if (rtErrorcd.equals("01"))  {
-								// Cube update query calls
-										
-							}
+							pstmt3.setString(1, rtErrorcd);
+							pstmt3.setString(2, rtErrorcd);
+							pstmt3.setString(3, rtErrormsg);
+							pstmt3.setString(4, rtTranDate);
+							pstmt3.setString(5, rtTranSeq);
+							pstmt3.setString(6, cocd);
+							pstmt3.setString(7, refCd);
 							
-							
+							rs3 = pstmt3.executeQuery();
 						}
 						post.releaseConnection();
 					} catch (Exception e)  {
-					
+						Logger.debug("IOS - Exception occurred : " + e);
 					}
 	
-					jsonObject.clear();  
+					sendingStockInfo.clear();  
 					prodincArray.clear();
 					
 					count++;		// 사업부별 성공 카운트
@@ -890,7 +964,237 @@ public class CubeService {
 	 * @param dbmode	 * @param inuser	 * @param call_api	 * @return	 * @throws Exception	 * @throws SQLException
 	 */
 	public String getRecvItemStock(String dbmode, String inuser, String call_api, String connip, String transcd)  throws Exception, SQLException {
-		return null;
+		// POST URL 호출 
+		String url = "http://prs.favinit.com/CubeAPI/StockModResultAPI.asp";
+		String methodName ="com.service.CubeService.getRecvItemStock()";
+		
+		/*  JDBC Connection 변수 선언  */
+		Connection 		conn		= null;
+		
+		/* PreparedStatement 선언 */
+		PreparedStatement	pstmt0		= null; //        쿼리문 실행
+		PreparedStatement	pstmt1		= null; //     주 쿼리문 실행
+		PreparedStatement	pstmt2		= null; //   서브 쿼리문 실행
+		
+		/* ResultSet 선언 */
+		ResultSet			rs0			= null;
+		ResultSet			rs1			= null;
+		ResultSet			rs2			= null;
+		
+		/*  StringBuffer 선언  */
+		StringBuffer	sqlBuffer0  = new StringBuffer(1000);	// 		   쿼리문
+		StringBuffer	sqlBuffer1  = new StringBuffer(1000);	//      주 쿼리문
+		StringBuffer	sqlBuffer2  = new StringBuffer(1000);	//      주 쿼리문
+		StringBuffer	sqlBuffer4  = new StringBuffer(1000);
+		
+		String 	sendMessage = null;		
+		int successCnt 	= 0;
+		
+		try {
+			conn =	DataBaseManager.getConnection(dbmode);		
+			conn.setAutoCommit(false);
+	
+			Logger.debug("0. Favinit 상품정보 전송 결과 확인을 위한 SQL 작성 시작");
+
+			/* 0. Favinit 재고정보 전송을위한 SQL 작성 시작*/
+			sqlBuffer0.append("SELECT   RETC AS COCD			\n");	
+			sqlBuffer0.append("	, REFCD  AS VENDOR_ID			\n");	
+			sqlBuffer0.append("	FROM TBB150						\n");
+			sqlBuffer0.append("	WHERE REFTP = 'ZY'				\n");
+			sqlBuffer0.append("	AND REFCD <> '0000'				\n");
+			sqlBuffer0.append("	AND USEYN = 'Y'					\n");
+			sqlBuffer0.append("	AND CD3   = 'Y'					\n");
+			sqlBuffer0.append("	AND CD4   = '"+ transcd +"'		\n");
+			sqlBuffer0.append("	GROUP BY RETC, REFCD			\n");
+			
+			/* 0-1. FAVINIT API 재고 수신요청을 위한 SQL 작성 시작*/
+			sqlBuffer1.append("SELECT RECV_DATE											  \n");
+			sqlBuffer1.append(", RECV_SEQ                                                 \n");
+			sqlBuffer1.append("FROM TBD260                                                \n");
+			sqlBuffer1.append("WHERE TRAN_DATE BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')     \n");
+			sqlBuffer1.append("AND COCD      = ?        		                          \n");
+			sqlBuffer1.append("AND VENDOR_ID = ?		                                  \n");
+			sqlBuffer1.append("AND STATUS = '05'                                          \n");
+			sqlBuffer1.append("GROUP BY RECV_DATE, RECV_SEQ                               \n");
+			sqlBuffer1.append("ORDER BY RECV_DATE, RECV_SEQ                               \n");
+
+			/* 0-2. FAVINIT 재고정보 수신후 결과반영 */
+			sqlBuffer2.append("UPDATE  TBD260                                              \n");
+			sqlBuffer2.append("SET STATUS	= DECODE(?, '00', '05', ?) 				       \n");
+			sqlBuffer2.append(",STATUS_MSG	= ?			                                   \n");
+			sqlBuffer2.append(",UPDUSER		= 'FAV_FINAL'                                  \n");
+			sqlBuffer2.append(",UPDTIME		= TO_CHAR(SYSDATE,'YYYYMMDDHH24MISS')          \n");
+			sqlBuffer2.append("WHERE STATUS    = '05'                                      \n");
+			sqlBuffer2.append("AND TRAN_DATE BETWEEN TO_CHAR(SYSDATE -7, 'YYYYMMDD') AND TO_CHAR(SYSDATE, 'YYYYMMDD')       \n");
+			sqlBuffer2.append("AND RECV_DATE = ?                               			   \n");
+			sqlBuffer2.append("AND RECV_SEQ  = ?                    			           \n");
+			sqlBuffer2.append("AND VENDOR_ID = ?        			                       \n");
+			sqlBuffer2.append("AND COCD      = ?		                                   \n");
+					
+			pstmt0 = conn.prepareStatement(sqlBuffer0.toString()); 			
+			pstmt1 = conn.prepareStatement(sqlBuffer1.toString()); 
+			pstmt2 = conn.prepareStatement(sqlBuffer2.toString()); 
+
+			rs0 = pstmt0.executeQuery();
+	
+			JSONObject strReqItemResult = new JSONObject();
+			
+			while(rs0.next()){	// vendor별 loop
+				int count 		= 0;
+				int errCnt 		= 0;
+				int cnt 		= 0;
+			
+				// 각 vendor 별로 송신데이터 생성 
+				String cocd = StringUtil.nullTo(rs0.getString("COCD"),"");
+				String refCd = StringUtil.nullTo(rs0.getString("VENDOR_ID"), "");
+								
+				pstmt1.setString(1, cocd);
+				pstmt1.setString(2, refCd);
+				
+				rs1 = pstmt1.executeQuery();
+				
+				while(rs1.next())  {
+					String strTranDate = StringUtil.nullTo(rs1.getString("RECV_DATE"),"");
+					String strTranSeq = StringUtil.nullTo(rs1.getString("RECV_SEQ"),"");
+				
+					strReqItemResult.put("tranDate", StringUtil.nullTo(strTranDate,""));	
+					strReqItemResult.put("tranSeq", StringUtil.nullTo(strTranSeq,""));		
+					strReqItemResult.put("vendorId", StringUtil.nullTo(refCd,""));		
+				
+					try   {
+					    // 생성된 Json data 전송 - Hitherto exists in this member function...
+					    PostMethod post = new PostMethod(url);
+					    int conTimeOut = 120000;
+					    int soTimeOut = 120000;
+					    int idleTimeOut = 120000;
+							
+					    // data 생성
+					    // data = tranDate, tranSeq, vendorId
+					    // cube query 처리해서 나온 것들을 json으로 만들고 해당 숫자만큼 전송해서 결과값 받아옴 
+														
+					    // As for each vendor the following code is executed
+					    MultiThreadedHttpConnectionManager connectionManager = new MultiThreadedHttpConnectionManager();
+					    HttpClient httpClient = new HttpClient(connectionManager);
+					    httpClient.getParams().setParameter("http.protocol.expect-continue", false);
+					    httpClient.getParams().setParameter("http.connection.timeout", conTimeOut);
+					    httpClient.getParams().setParameter("http.socket.timeout", soTimeOut);
+					    httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(conTimeOut);
+					    httpClient.getHttpConnectionManager().getParams().setSoTimeout(soTimeOut);
+					    connectionManager.closeIdleConnections(idleTimeOut);
+					    connectionManager.getParams().setMaxTotalConnections(100);
+					    post.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+					    post.addParameter("data", URLEncoder.encode(strReqItemResult.toString(), "UTF-8"));
+					    int resultCode = httpClient.executeMethod(post);
+							
+					    if (resultCode == 200)  {
+					    	BufferedReader br = new BufferedReader(new InputStreamReader(post.getResponseBodyAsStream()));
+								
+							String retString = "";
+							String line;
+		
+							while ((line = br.readLine()) != null)  {
+							    retString += line;
+							}
+							br.close();
+								
+							String jsonString = URLDecoder.decode(retString,"UTF-8");
+							Logger.debug("Response Json Object : " + jsonString);
+										
+							JSONObject jObj = JSONObject.fromObject(jsonString);
+							String errorcd  = jObj.getString("errorcd");
+							String errormsg = jObj.getString("errormsg");
+						
+							// [list] 항목에 대한 처리 								
+							if (errorcd.equals("01"))  {	// if item registration was successful 
+							    JSONArray ResultItemArray = jObj.getJSONArray("list");
+											
+							    String rtBarcode = "";
+							    String rtStatusCd = "";
+							    String rtStatusMsg = "";
+							    String rtTranDate = "";
+							    String rtTranSeq = "";
+										
+							    for (int i = 0; i < ResultItemArray.size(); i++)  {
+									JSONObject rtList = ResultItemArray.getJSONObject(i);
+									rtBarcode = StringUtil.nullTo(rtList.getString("barcode"),""); 
+									rtStatusCd = StringUtil.nullTo(rtList.getString("statusCd"),""); 
+									rtStatusMsg = StringUtil.nullTo(rtList.getString("statusMsg"),""); 
+									rtTranDate = StringUtil.nullTo(rtList.getString("tranDate"),"");
+									rtTranSeq = StringUtil.nullTo(rtList.getString("tranSeq"),"");
+									
+									/////////////////////////////////////////////////////////////////////////
+									if (pstmt2 != null)  {
+										pstmt2.close();
+										pstmt2 = null;
+									}
+									pstmt2 = conn.prepareStatement(sqlBuffer2.toString());
+									/////////////////////////////////////////////////////////////////////////
+									
+								    // Cube update query calls
+									pstmt2.setString(1, errorcd);
+									pstmt2.setString(2, errorcd);
+									pstmt2.setString(3, rtStatusMsg);
+									pstmt2.setString(4, strTranDate);	// items to have been sent
+									pstmt2.setString(5, strTranSeq);
+									pstmt2.setString(6, refCd);
+									pstmt2.setString(7, cocd);
+									
+									// update to be successful
+									int x = pstmt2.executeUpdate();
+									Logger.debug("Query : " + pstmt2.toString());
+									rtList.clear();
+							    } // end for
+							    ResultItemArray.clear();
+							    sendMessage = "SUCCESS :" + " (" + rtTranDate + " : " + rtTranSeq + ")";
+							} else  {	// error, end if errcd is not '01' 
+								sendMessage = "Error :";
+							}
+					    } // end if resultcode '200'
+					    post.releaseConnection();
+					    // Post 전송 수정 End - KBJ
+					} catch (Exception e)  {
+						System.out.println(e);
+					}
+					
+					count++;		// 사업부별 성공 카운트
+					successCnt++;	// 전체 성공 카운트
+					strReqItemResult.clear();
+				}
+				sqlBuffer4.append("사업부["+cocd+"] 정상:"+count+"/ 실패:"+errCnt+"  "); 
+			}
+			
+			if (successCnt > 0)  {
+				sendMessage = "SUCCESS !!!!! ["+sqlBuffer4.toString()+"]";
+			} else  {
+				sendMessage = "NO DATA !!!!! [ 송신할 상품정보가 존재하지 않습니다. ]";
+			}
+		} catch (SQLException e) {
+			conn.rollback();			
+			Logger.debug("###Error###:"+ methodName +" Error sql:"+ e.toString());			
+			sendMessage = "FAIL!["+e.toString()+"]";			
+		} catch (Exception e) {
+			Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());
+			sendMessage = "FAIL!!!["+e.toString()+"]";
+		} finally  {
+			try  {
+				conn.setAutoCommit(true);
+				
+				if( rs0 !=null ) try{ rs0.close(); rs0 = null; }catch(Exception e){}finally{rs0 = null;}
+				if( rs1 !=null ) try{ rs1.close(); rs1 = null; }catch(Exception e){}finally{rs1 = null;}
+				if( rs2 !=null ) try{ rs2.close(); rs2 = null; }catch(Exception e){}finally{rs2 = null;}
+				
+				if(pstmt0  != null ) try{ pstmt0.close(); pstmt0 = null; }catch(Exception e){}finally{pstmt0 = null;}
+				if(pstmt1  != null ) try{ pstmt1.close(); pstmt1 = null; }catch(Exception e){}finally{pstmt1 = null;}				
+				if(pstmt2  != null ) try{ pstmt2.close(); pstmt2 = null; }catch(Exception e){}finally{pstmt2 = null;}
+				
+				DataBaseManager.close(conn, dbmode);				
+				if(conn	!= null ) try{ conn.close(); conn = null; }catch(Exception e){}finally{conn = null;}		
+			} catch (Exception e)  {
+		    	Logger.debug("###Error###:"+ methodName +" Error :"+ e.toString());						
+				sendMessage = "FAIL!!!!["+e.toString()+"]";
+		    }
+		}
+		return sendMessage;
 	}
 	
 	
