@@ -24,6 +24,7 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.log4j.Level;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -69,7 +70,6 @@ public class CubeService {
 	}
 
 	private CubeService() {
-		
 	}
 	
 	/**
@@ -78,9 +78,10 @@ public class CubeService {
 	 * @param dbmode	 * @param inuser	 * @param call_api	 * @return	 * @throws Exception	 * @throws SQLException
 	 */
 	public String getSendProductData(String dbmode, String inuser, String call_api, String connip, String transcd)  throws Exception, SQLException	{
+		String url = "http://prs.favinit.com/CubeAPI/ProductInsAPI.asp";
 		String methodName ="com.service.CubeService.getSendProductData()";
 		Logger.debug(methodName);
-		
+
 		/*  JDBC Connection 변수 선언  */
 		Connection 		conn		= null;
 		
@@ -239,7 +240,7 @@ public class CubeService {
 				if (rs3.next())  {
 					cnt = rs3.getInt("CNT");
 				}
-				
+				Logger.debug("BJK : Send Product Count - " + String.valueOf(cnt));
 				if(cnt > 0)  { //전송 DATA 있을때..
 					pstmt1.setString(1, cocd);
 					pstmt1.setString(2, vdcd);
@@ -287,13 +288,12 @@ public class CubeService {
 						prodList.clear();
 					} // 상품 전송단위 JSON 생성 
 					jsonObject.put("list", prodincArray);	// it does not mean the string 'list' appears only once
-	
+
+					Logger.debug("Json Object : "+jsonObject.toString());
 					try   {
 						// 생성된 Json data 전송 - Hitherto exists in this member function...
 
 						// Post 전송 수정 Start - KBJ
-						Logger.debug("Json Object : "+jsonObject.toString());
-						String url = "http://prs.favinit.com/CubeAPI/ProductInsAPI.asp";
 						PostMethod post = new PostMethod(url);
 						int conTimeOut = 120000;
 						int soTimeOut = 120000;
@@ -348,6 +348,9 @@ public class CubeService {
 						}
 						post.releaseConnection();
 						// Post 전송 수정 End - KBJ
+					} catch (SQLException e)  {
+						conn.rollback();
+						Logger.debug("IOS - SQLException occurred : " + e);
 					} catch (Exception e)  {
 						Logger.debug("IOS - Exception occurred : " + e);
 					}
@@ -407,6 +410,7 @@ public class CubeService {
 		// POST URL 호출 
 		String url = "http://prs.favinit.com/CubeAPI/ProductInsResultAPI.asp";
 		String methodName ="com.service.CubeService.getRecvProductData()";
+		Logger.debug(methodName);
 		
 		/*  JDBC Connection 변수 선언  */
 		Connection 		conn		= null;
@@ -437,8 +441,6 @@ public class CubeService {
 			conn =	DataBaseManager.getConnection(dbmode);		
 			conn.setAutoCommit(false);
 	
-			Logger.debug("0. Favinit 상품정보 전송 결과 확인을 위한 SQL 작성 시작");
-			
 			/* 0. Favinit API 전송을위한 SQL 작성 시작*/
 			sqlBuffer0.append("SELECT   RETC AS COCD					\n");	
 			sqlBuffer0.append("		, CD1  AS VDCD						\n");	
@@ -512,6 +514,8 @@ public class CubeService {
 					strReqItemResult.put("tranSeq", StringUtil.nullTo(strTranSeq,""));		
 					strReqItemResult.put("vendorId", StringUtil.nullTo(refCd,""));		
 				
+					Logger.debug("Json Object : "+strReqItemResult.toString());
+					
 					try   {
 					    // 생성된 Json data 전송 - Hitherto exists in this member function...
 					    PostMethod post = new PostMethod(url);
@@ -611,10 +615,12 @@ public class CubeService {
 					    } // end if resultcode '200'
 					    post.releaseConnection();
 					    // Post 전송 수정 End - KBJ
+					} catch (SQLException e)  {
+						conn.rollback();
+						Logger.debug("IOS - SQLException occurred : " + e);
 					} catch (Exception e)  {
-						System.out.println(e);
+						Logger.debug("IOS - Exception occurred : " + e);
 					}
-					
 					count++;		// 사업부별 성공 카운트
 					successCnt++;	// 전체 성공 카운트
 					strReqItemResult.clear();
@@ -662,6 +668,7 @@ public class CubeService {
 	 * @param dbmode	 * @param inuser	 * @param call_api	 * @return	 * @throws Exception	 * @throws SQLException
 	 */
 	public String getSendItemStock(String dbmode, String inuser, String call_api, String connip, String transcd)  throws Exception, SQLException {
+		String url = "http://prs.favinit.com/CubeAPI/StockModAPI.asp";
 		String methodName ="com.service.CubeService.getSendItemStock()";
 		Logger.debug(methodName);
 		
@@ -696,8 +703,6 @@ public class CubeService {
 			conn =	DataBaseManager.getConnection(dbmode);		
 			conn.setAutoCommit(false);
 	
-			Logger.debug("0. Favinit 재고정보 전송을 위한 SQL 작성 시작");
-			
 			/* 0. Favinit 재고정보 전송을위한 SQL 작성 시작*/
 			sqlBuffer0.append("SELECT   RETC AS COCD			\n");	
 			sqlBuffer0.append("	, REFCD  AS VENDOR_ID			\n");	
@@ -830,6 +835,7 @@ public class CubeService {
 					cnt = rs2.getInt("CNT");
 				}
 				
+				Logger.debug("BJK : Send Stock Count - " + String.valueOf(cnt));
 				if(cnt > 0)  { //전송 DATA 있을때..
 					pstmt1.setString(1, refCd);
 					pstmt1.setString(2, cocd);
@@ -857,7 +863,6 @@ public class CubeService {
 	
 					try   {
 						Logger.debug("Json Object : "+ sendingStockInfo.toString());
-						String url = "http://prs.favinit.com/CubeAPI/StockModAPI.asp";
 						PostMethod post = new PostMethod(url);
 						int conTimeOut = 120000;
 						int soTimeOut = 120000;
@@ -909,6 +914,9 @@ public class CubeService {
 							rs3 = pstmt3.executeQuery();
 						}
 						post.releaseConnection();
+					} catch (SQLException e)  {
+						conn.rollback();
+						Logger.debug("IOS - SQLException occurred : " + e);
 					} catch (Exception e)  {
 						Logger.debug("IOS - Exception occurred : " + e);
 					}
@@ -967,6 +975,7 @@ public class CubeService {
 		// POST URL 호출 
 		String url = "http://prs.favinit.com/CubeAPI/StockModResultAPI.asp";
 		String methodName ="com.service.CubeService.getRecvItemStock()";
+		Logger.debug(methodName);
 		
 		/*  JDBC Connection 변수 선언  */
 		Connection 		conn		= null;
@@ -994,8 +1003,6 @@ public class CubeService {
 			conn =	DataBaseManager.getConnection(dbmode);		
 			conn.setAutoCommit(false);
 	
-			Logger.debug("0. Favinit 상품정보 전송 결과 확인을 위한 SQL 작성 시작");
-
 			/* 0. Favinit 재고정보 전송을위한 SQL 작성 시작*/
 			sqlBuffer0.append("SELECT   RETC AS COCD			\n");	
 			sqlBuffer0.append("	, REFCD  AS VENDOR_ID			\n");	
@@ -1061,6 +1068,8 @@ public class CubeService {
 					strReqItemResult.put("tranSeq", StringUtil.nullTo(strTranSeq,""));		
 					strReqItemResult.put("vendorId", StringUtil.nullTo(refCd,""));		
 				
+					Logger.debug("Json Object : "+strReqItemResult.toString());
+					
 					try   {
 					    // 생성된 Json data 전송 - Hitherto exists in this member function...
 					    PostMethod post = new PostMethod(url);
@@ -1152,10 +1161,12 @@ public class CubeService {
 					    } // end if resultcode '200'
 					    post.releaseConnection();
 					    // Post 전송 수정 End - KBJ
+					} catch (SQLException e)  {
+						conn.rollback();
+						Logger.debug("IOS - SQLException occurred : " + e);
 					} catch (Exception e)  {
-						System.out.println(e);
+						Logger.debug("IOS - Exception occurred : " + e);
 					}
-					
 					count++;		// 사업부별 성공 카운트
 					successCnt++;	// 전체 성공 카운트
 					strReqItemResult.clear();
