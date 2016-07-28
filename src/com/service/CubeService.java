@@ -1036,6 +1036,7 @@ public class CubeService {
 			sqlBuffer2.append("AND RECV_DATE = ?                               			   \n");
 			sqlBuffer2.append("AND RECV_SEQ  = ?                    			           \n");
 			sqlBuffer2.append("AND VENDOR_ID = ?        			                       \n");
+			sqlBuffer2.append("AND BARCODE 	 = ?		                                   \n");
 			sqlBuffer2.append("AND COCD      = ?		                                   \n");
 					
 			pstmt0 = conn.prepareStatement(sqlBuffer0.toString()); 			
@@ -1140,13 +1141,14 @@ public class CubeService {
 									/////////////////////////////////////////////////////////////////////////
 									
 								    // Cube update query calls
-									pstmt2.setString(1, errorcd);
-									pstmt2.setString(2, errorcd);
+									pstmt2.setString(1, rtStatusCd);
+									pstmt2.setString(2, rtStatusCd);
 									pstmt2.setString(3, rtStatusMsg);
 									pstmt2.setString(4, strTranDate);	// items to have been sent
 									pstmt2.setString(5, strTranSeq);
 									pstmt2.setString(6, refCd);
-									pstmt2.setString(7, cocd);
+									pstmt2.setString(7, rtBarcode);
+									pstmt2.setString(8, cocd);
 									
 									// update to be successful
 									int x = pstmt2.executeUpdate();
